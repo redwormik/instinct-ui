@@ -7,17 +7,17 @@ var components = {
 		style: {border: '3px solid black'},
 		children: [
 			{root: 'caption', children: '{caption}'},
-			{for: '{data}', index: 'index', value: 'value', children: [
+			{for: '{data}', index: 'index', value: 'value', do:
 				{root: 'TableRow', data: '{value}'},
-			]}
+			}
 		],
 	},
 	TableRow: {
 		root: 'tr',
 		style: {background: '#999'},
-		children: {for: '{data}', index: 'index', value: 'value', children: [
+		children: {for: '{data}', index: 'index', value: 'value', do:
 			{root: 'TableCell', children: '{value}'},
-		]},
+		},
 	},
 	TableCell: {
 		root: 'td',
@@ -92,15 +92,15 @@ var components = {
 	}
 }
 
-var root = /*{
+var root = {
 	root: 'div',
 	children: [
 		{root: 'h1', style: {color: 'blue'}, title: 'test', children: 'foo'},
-		*/{root: 'Table', caption: 'This is a table', data: [
+		{root: 'Table', caption: 'This is a table', data: [
 			['cell', 'second', 'last'],
 			['not a cell', 'not second', 'last'],
 			['not a cell', 'second', 'not last'],
-		]}/*,
+		]},
 		{root: 'div', children: 'test'},
 		{root: 'br'},
 		{root: 'a', href: "http://seznam.cz", target: "_blank", children: 'link'},
@@ -124,7 +124,7 @@ var root = /*{
 			{root: 'Box', name: 'THIS IS A BOX', style: {position: 'absolute', top: 200, left: 300}}
 		]},
 	]
-}*/
+}
 
 var RendererBox = React.createClass({
 	getInitialState: function() {

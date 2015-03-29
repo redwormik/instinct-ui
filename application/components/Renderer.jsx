@@ -22,7 +22,7 @@ var Renderer = React.createClass({
 				for (var key in obj) {
 					if (typeof obj[key] === 'object' && obj[key] !== null) {
 						if (obj[key].for) {
-							var children = obj[key].children;
+							var children = obj[key].do;
 							var forNode = this.replacePropRefs({for: obj[key].for, value: obj[key].value, index: obj[key].index});
 							copy[key] = [];
 							for (var index in forNode.for) {
@@ -31,7 +31,6 @@ var Renderer = React.createClass({
 								// TODO: scope
 								copy[key][index] = this.replacePropRefs(children);
 							}
-							console.log(copy[key]);
 						}
 						else {
 							copy[key] = this.replacePropRefs(obj[key]);
@@ -63,16 +62,11 @@ var Renderer = React.createClass({
 		if (!def.root) {
 			return null;
 		}
-		/*if (def.for) {
-			return;
-		}*/
 
 		var isComponent = /^[A-Z]/.exec(def.root);
 		var root = isComponent ? components[def.root] : def.root;
 		if (root === undefined && isComponent) {
-			return (
-				<span className="error" key="{index}">UNKNOWN COMPONENT "{def.root}"</span>
-			);
+			return "UNKNOWN COMPONENT \"" + def.root + "\"";
 		}
 
 		var props = {};
