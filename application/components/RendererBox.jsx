@@ -89,6 +89,17 @@ var components = {
 		root: 'div',
 		style: {width: '100%', height: 600, position: 'relative'},
 		children: '{children}',
+	},
+	List: {
+		root: 'ul',
+		children: [
+			{for: '{leaves}', index: 'index', value: 'value', children:
+				{root: 'li', children: '{value}'},
+			},
+			{for: '{data}', index: 'index', value: 'value', children:
+				{root: 'List', leaves: '{value}'},
+			}
+		]
 	}
 }
 
@@ -125,6 +136,12 @@ var root = {
 		]},
 	]
 }
+
+root = {
+	root: 'List',
+	leaves: [1,2,3,4],
+	data: [['a','b','c','d'],['i','ii','iii','iv']]
+};
 
 var RendererBox = React.createClass({
 	getInitialState: function() {
