@@ -6,7 +6,7 @@ var Main = React.createClass({
 	mixins: [
 		Ambidex.mixins.Title
 	],
-	titleSection: 'MI-DIP app',
+	sectionTitle: 'MI-DIP app',
 	render: function () {
 		return (
 			<div className="Main">
