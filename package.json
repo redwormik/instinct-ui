@@ -6,6 +6,7 @@
   "dependencies": {
     "ambidex": "0.1.4",
     "isomorphic-reflux": "0.2.1",
+    "mach": "^1.3.5",
     "make-node-env-global": "1.0",
     "node-jsx": "0.12.4",
     "react": "0.12",

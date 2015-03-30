@@ -1,0 +1,130 @@
+{
+	"Table": {
+		"root": "table",
+		"style": {
+			"border": "3px solid black"
+		},
+		"children": [
+			{
+				"root": "caption",
+				"children": "{caption}"
+			},
+			{
+				"for": "{data}",
+				"index": "index",
+				"value": "value",
+				"do": {
+					"root": "TableRow",
+					"data": "{value}"
+				}
+			}
+		]
+	},
+	"TableRow": {
+		"root": "tr",
+		"style": {
+			"background": "#999"
+		},
+		"children": {
+			"for": "{data}",
+			"index": "index",
+			"value": "value",
+			"do": {
+				"root": "TableCell",
+				"children": "{value}"
+			}
+		}
+	},
+	"TableCell": {
+		"root": "td",
+		"style": {
+			"border": "1px solid black"
+		},
+		"children": "{children}"
+	},
+	"AnotherTable": {
+		"root": "Table"
+	},
+	"Box": {
+		"root": "div",
+		"style": {
+			"border": "3px solid black",
+			"float": "left",
+			"padding": "5",
+			"margin": "5",
+			"position": "{style.position}",
+			"top": "{style.top}",
+			"left": "{style.left}"
+		},
+		"children": [
+			{
+				"root": "div",
+				"children": "{name}"
+			},
+			"{children}"
+		]
+	},
+	"Boxes": {
+		"root": "div",
+		"children": [
+			{
+				"root": "Box",
+				"name": "My Box",
+				"children": [
+					{
+						"root": "Box",
+						"name": "My Inner Box",
+						"children": {
+							"root": "Box",
+							"name": "My Inner Inner Box"
+						}
+					},
+					{
+						"root": "Box",
+						"name": "My Second Inner Box"
+					}
+				]
+			},
+			{
+				"root": "div",
+				"style": {
+					"clear": "both"
+				}
+			}
+		]
+	},
+	"Boxes2": {
+		"root": "Box",
+		"name": "NOT NAME",
+		"children": [
+			{
+				"root": "Box",
+				"name": "{name}"
+			}
+		]
+	},
+	"Figure": {
+		"root": "div",
+		"children": [
+			"{title}",
+			{
+				"root": "br"
+			},
+			{
+				"root": "img",
+				"src": "{src}",
+				"alt": "{title}",
+				"title": "{title}"
+			}
+		]
+	},
+	"Container": {
+		"root": "div",
+		"style": {
+			"width": "100%",
+			"height": "600",
+			"position": "relative"
+		},
+		"children": "{children}"
+	}
+}

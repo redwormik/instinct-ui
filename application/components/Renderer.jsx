@@ -89,7 +89,7 @@ var Renderer = React.createClass({
 			components[key] = this.createComponent(components, key);
 		}
 		return (
-			<div>{this.createElement(components, this.props.root)}</div>
+			<div>{this.createElement(components, this.props.data)}</div>
 		);
 	}
 });
