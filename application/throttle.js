@@ -5,7 +5,7 @@
 function throttle(fn, threshold) {
 	var timer, last;
 
-	return function() {
+	return function () {
 		var that = this;
 		var args = arguments;
 		var now = +(new Date());
@@ -13,7 +13,7 @@ function throttle(fn, threshold) {
 		if (timer) clearTimeout(timer);
 
 		if (last && (now - last < threshold)) {
-			timer = setTimeout(function() {
+			timer = setTimeout(function () {
 				last = +(new Date());
 				fn.apply(that, args);
 			}, threshold - (now - last));

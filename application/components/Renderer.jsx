@@ -1,13 +1,14 @@
 var React = require("react");
 
+
 var Renderer = React.createClass({
-	createComponent: function(components, name) {
+	createComponent: function (components, name) {
 		var renderer = this;
 		var definition = this.props.components[name];
 		return React.createClass({
 			displayName: name,
-			getProp: function(ref) {
-				var parts = ref.split('.');
+			getProp: function (ref) {
+				var parts = ref.split(".");
 				var props = this.props;
 				for (var part in parts) {
 					if (props) {
@@ -16,14 +17,14 @@ var Renderer = React.createClass({
 				}
 				return props;
 			},
-			replacePropRefs: function(obj, scope) {
+			replacePropRefs: function (obj, scope) {
 				var copy = Array.isArray(obj) ? [] : {};
 				var match;
 				for (var key in obj) {
-					if (typeof obj[key] === 'object' && obj[key] !== null) {
+					if (typeof obj[key] === "object" && obj[key] !== null) {
 						if (obj[key].for) {
 							var children = obj[key].do;
-							var forNode = this.replacePropRefs({for: obj[key].for, value: obj[key].value, index: obj[key].index});
+							var forNode = this.replacePropRefs({ for: obj[key].for, value: obj[key].value, index: obj[key].index });
 							copy[key] = [];
 							for (var index in forNode.for) {
 								if (forNode.index) this.props[forNode.index] = index;
@@ -45,18 +46,18 @@ var Renderer = React.createClass({
 				}
 				return copy;
 			},
-			render: function() {
+			render: function () {
 				var withProps = this.replacePropRefs(definition);
 				var res = renderer.createElement(components, withProps);
 				return res;
-			},
+			}
 		});
 	},
-	createElement: function(components, def, index) {
+	createElement: function (components, def, index) {
 		if (def && def.map) {
 			return def.map(this.createElement.bind(this, components));
 		}
-		if (!def || typeof def !== 'object') {
+		if (!def || typeof def !== "object") {
 			return def;
 		}
 		if (!def.root) {
@@ -71,7 +72,7 @@ var Renderer = React.createClass({
 
 		var props = {};
 		for (var key in def) {
-			if (key !== 'root' && key !== 'children') {
+			if (key !== "root" && key !== "children") {
 				props[key] = def[key];
 			}
 		}
@@ -89,7 +90,7 @@ var Renderer = React.createClass({
 			components[key] = this.createComponent(components, key);
 		}
 		return (
-			<div>{this.createElement(components, this.props.data)}</div>
+			<div>{ this.createElement(components, this.props.data) }</div>
 		);
 	}
 });

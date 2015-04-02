@@ -1,10 +1,10 @@
 module.exports = [
 	{
-		actionName: 'getComponents',
-		storeName: 'Components'
+		actionName: "getComponents",
+		storeName: "Components"
 	},
 	{
-		actionName: 'getData',
-		storeName: 'Data'
+		actionName: "getData",
+		storeName: "Data"
 	}
 ];
