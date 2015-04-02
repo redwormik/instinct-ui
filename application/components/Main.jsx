@@ -8,7 +8,7 @@ var Main = React.createClass({
 	mixins: [
 		Ambidex.mixins.Title
 	],
-	sectionTitle: "MI-DIP app",
+	sectionTitle: "Instinct UI",
 	render: function () {
 		return (
 			<div className="Main">

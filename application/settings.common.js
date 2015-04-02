@@ -1,6 +1,6 @@
 module.exports = {
-	NAME: "MI-DIP",
-	SHORT_NAME: "mi-dip",
+	NAME: "Instinct UI",
+	SHORT_NAME: "instinct-ui",
 	FAV_ICON_URL: "/static/images/logo.svg",
 	TITLE_SEPARATOR: " – ",
 	FILESYSTEM_PATHS: {
@@ -10,5 +10,8 @@ module.exports = {
 		REFLUX_ACTIONS_FOR_ROUTER_STATE: "./reflux/actionsForRouterState.js",
 		STYLES: "./styles.scss",
 		BUNDLES: "../bundles/"
+	},
+	CUSTOM_SETTINGS: {
+		STATIC_URL: "/static"
 	}
 };

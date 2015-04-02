@@ -1,5 +1,5 @@
 var mach = require("mach");
-var Promise = require("mach/utils/Promise");
+var Promise = require('when/lib/Promise');
 var fs = require("fs");
 
 
