@@ -1,7 +1,7 @@
 module.exports = {
 	NAME: "Instinct UI",
 	SHORT_NAME: "instinct-ui",
-	FAV_ICON_URL: "/static/images/logo.svg",
+	FAV_ICON_URL: "/static/images/favicon.ico",
 	TITLE_SEPARATOR: " – ",
 	FILESYSTEM_PATHS: {
 		BASE: __dirname,
