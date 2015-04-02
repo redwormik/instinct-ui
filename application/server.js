@@ -5,14 +5,46 @@ var fs = require('fs');
 var app = mach.stack();
 
 
-app.get('/components.json', function (request) {
+app.get('/components.json', function (conn) {
 	var file = __dirname + '/../data/components.json';
-	return request.file({ path: file });
+	return conn.file({ path: file });
 });
 
-app.get('/data.json', function (request) {
+app.get('/data.json', function (conn) {
 	var file = __dirname + '/../data/data.json';
-	return request.file({ path: file });
+	return conn.file({ path: file });
+});
+
+app.post('/components.json', function (conn) {
+	var file = __dirname + '/../data/components.json';
+	return conn.getParams({ components: String }).then(function (params) {
+		return new Promise(function (resolve, reject) {
+			var components = JSON.parse(params.components);
+			fs.writeFile(file, JSON.stringify(components, null, '\t'), function (error, data) {
+				error ? reject(error) : fs.readFile(file, function (error, data) {
+					error ? reject(error) : resolve(data);
+				});
+			});
+		});
+	}).then(function () {
+		conn.file(file);
+	});
+});
+
+app.post('/data.json', function (conn) {
+	var file = __dirname + '/../data/data.json';
+	return conn.getParams({ data: String }).then(function (params) {
+		return new Promise(function (resolve, reject) {
+			var data = JSON.parse(params.data);
+			fs.writeFile(file, JSON.stringify(data, null, '\t'), function (error, data) {
+				error ? reject(error) : fs.readFile(file, function (error, data) {
+					error ? reject(error) : resolve(data);
+				});
+			});
+		});
+	}).then(function () {
+		conn.file(file);
+	});
 });
 
 

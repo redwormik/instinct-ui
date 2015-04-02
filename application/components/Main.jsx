@@ -1,6 +1,7 @@
 var Ambidex = require("ambidex");
 var React = require("react");
 var RouteHandler = require("react-router").RouteHandler;
+var Link = require("react-router").Link;
 
 var Main = React.createClass({
 	mixins: [
@@ -10,7 +11,12 @@ var Main = React.createClass({
 	render: function () {
 		return (
 			<div className="Main">
-				<nav>This is the nav</nav>
+				<nav>
+					<ul>
+						<li><Link to="main">Home</Link></li>
+						<li><Link to="page">Page</Link></li>
+					</ul>
+				</nav>
 				<RouteHandler />
 			</div>
 		);
