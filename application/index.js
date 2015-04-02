@@ -1,6 +1,7 @@
 var Ambidex = require("ambidex");
 var fs = require("fs");
-var settings = require("./settings.local.js");
+var env = process.env.NODE_ENV || "local";
+var settings = require("./settings." + env + ".js");
 var server = require("./server.js");
 
 module.exports = new Ambidex({

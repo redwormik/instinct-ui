@@ -10,8 +10,5 @@ module.exports = {
 		"REFLUX_ACTIONS_FOR_ROUTER_STATE": "./reflux/actionsForRouterState.js",
 		"STYLES": "./styles.scss",
 		"BUNDLES": "../bundles/"
-	},
-	"CUSTOM_SETTINGS": {
-		"API_BASE_URL": "http://127.0.0.1:8080/api/"
 	}
 };
