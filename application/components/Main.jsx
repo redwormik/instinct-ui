@@ -12,12 +12,6 @@ var Main = React.createClass({
 	render: function () {
 		return (
 			<div className="Main">
-				<nav>
-					<ul>
-						<li><Link to="main">Home</Link></li>
-						<li><Link to="page">Page</Link></li>
-					</ul>
-				</nav>
 				<RouteHandler />
 			</div>
 		);

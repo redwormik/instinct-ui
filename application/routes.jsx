@@ -6,7 +6,6 @@ var DefaultRoute = Router.DefaultRoute;
 
 module.exports = (
 	<Route name="main" path="/" handler={ require("./components/Main.jsx") }>
-		<Route name="page" handler={ require("./components/Page.jsx") } />
 		<DefaultRoute handler={ require("./components/Home.jsx") } />
 	</Route>
 );
