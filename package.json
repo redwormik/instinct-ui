@@ -19,7 +19,7 @@
 		"npm": "2.7.x"
 	},
 	"scripts": {
-		"start": "node --harmony ./index.js",
+		"start": "node --harmony --max_old_space_size=420 ./index.js",
 		"stop": "killall instinct-ui",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
