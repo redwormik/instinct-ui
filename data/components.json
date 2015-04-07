@@ -80,33 +80,16 @@
 	"Box": {
 		"$type": "div",
 		"style": {
-			"border": "3px solid black",
-			"float": "left",
-			"padding": "5",
-			"margin": "5",
-			"position": {
-				"$type": "$index",
-				"index": "position",
-				"in": {
-					"$type": "$val",
-					"val": "style"
-				}
+			"$type": "$merge",
+			"merge": {
+				"$type": "$val",
+				"val": "style"
 			},
-			"top": {
-				"$type": "$index",
-				"index": "top",
-				"in": {
-					"$type": "$val",
-					"val": "style"
-				}
-			},
-			"left": {
-				"$type": "$index",
-				"index": "left",
-				"in": {
-					"$type": "$val",
-					"val": "style"
-				}
+			"with": {
+				"border": "3px solid black",
+				"float": "left",
+				"padding": "5",
+				"margin": "5"
 			}
 		},
 		"children": [

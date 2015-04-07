@@ -44,6 +44,23 @@ var Renderer = React.createClass({
 		}.bind(this));
 		return isArray ? map.toArray() : map.toObject();
 	},
+	$if: function (definition, values) {
+		var ifVal = this.replaceSyntax(definition.if, values);
+		return ifVal ?
+			this.replaceSyntax(definition.then, values) :
+			this.replaceSyntax(definition.else, values);
+	},
+	$merge: function (definition, values) {
+		var merge = Lazy(this.replaceSyntax(definition.merge, values));
+		var withVal = this.replaceSyntax(definition.with, values);
+		if (!withVal) {
+			return merge.toObject();
+		}
+		if (Array.isArray(withVal)) {
+			return merge.merge.apply(merge, withVal).toObject();
+		}
+		return merge.merge(withVal).toObject();
+	},
 	replaceSyntax: function (definition, values) {
 		if (definition === null || typeof definition !== "object") {
 			return definition;
@@ -125,8 +142,8 @@ var Renderer = React.createClass({
 				.toArray() :
 			[];
 
-		return children.length ?
-			React.createElement(type, props, children) :
+		return children.length > 0 ?
+			React.createElement(type, props, children.length === 1 ? children[0] : children) :
 			React.createElement(type, props);
 	},
 	createComponent: function (definition, name) {
