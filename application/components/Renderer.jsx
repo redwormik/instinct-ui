@@ -1,97 +1,145 @@
 var React = require("react");
+var Lazy = require("lazy.js");
+
+var ErrorMessage = require("./ErrorMessage.jsx");
 
 
 var Renderer = React.createClass({
-	createComponent: function (components, name) {
-		var renderer = this;
-		var definition = this.props.components[name];
+	getInitialState: function () {
+		return {
+			components: Lazy(this.props.components).map(function (definition, key) {
+				return [key, this.createComponent(definition, key)];
+			}.bind(this)).toObject()
+		};
+	},
+	componentWillReceiveProps: function (newProps) {
+		this.setState({
+			components: Lazy(newProps.components).map(function (definition, key) {
+				return [key, this.createComponent(definition, key)];
+			}.bind(this)).toObject()
+		});
+	},
+	$val: function (definition, values) {
+		var val = this.replaceSyntax(definition.val, values);
+		return values[val];
+	},
+	$index: function (definition, values) {
+		var index = this.replaceSyntax(definition.index, values);
+		var inVal = this.replaceSyntax(definition.in, values);
+		return inVal && inVal[index];
+	},
+	$for: function (definition, values) {
+		var forVal = this.replaceSyntax(definition.for, values);
+		var inVal = this.replaceSyntax(definition.in, values);
+		if (inVal === null || typeof inVal !== "object") {
+			return null;
+		}
+		var isArray = Array.isArray(inVal);
+		var map = Lazy(inVal).map(function (value, key) {
+			var tmp = {};
+			tmp[forVal] = key;
+			var newValues = Lazy(values).assign(tmp).toObject();
+			var doVal = this.replaceSyntax(definition.do, newValues);
+			return isArray ? doVal : [key, doVal];
+		}.bind(this));
+		return isArray ? map.toArray() : map.toObject();
+	},
+	replaceSyntax: function (definition, values) {
+		if (definition === null || typeof definition !== "object") {
+			return definition;
+		}
+
+		if (Array.isArray(definition)) {
+			return definition.map(function (def) {
+				return this.replaceSyntax(def, values);
+			}.bind(this));
+		}
+
+		var type = definition.$type;
+		if (!type || !/^\$/.exec(type)) {
+			return Lazy(definition).map(function (def, key) {
+				return [key, this.replaceSyntax(def, values)];
+			}.bind(this)).toObject();
+		}
+		if (!this[type]) {
+			throw new Error("Unknown syntax \"" + type + "\"");
+		}
+		return this[type](definition, values);
+	},
+	getType: function (definition) {
+		if (definition === null || typeof definition !== "object") {
+			throw new Error("Root element must be object")
+		}
+
+		if (Array.isArray(definition)) {
+			throw new Error("Element cannot be an array");
+		}
+
+		var type = definition.$type;
+
+		if (type === undefined) {
+			throw new Error("Missing $type attribute");
+		}
+
+		if (!type || /^\$/.exec(type)) {
+			throw new Error("Invalid $type \"" + type + "\"");
+		}
+
+		if (/^[A-Z]/.exec(type)) {
+			if (!this.state.components[type]) {
+				throw new Error("Unknown component \"" + type + "\"");
+			}
+			type = this.state.components[type];
+		}
+		return type;
+	},
+	createElement: function (definition, isRoot, values, index) {
+		try {
+			if (isRoot) {
+				definition = this.replaceSyntax(definition, values);
+			}
+			else if (definition === null || typeof definition !== "object") {
+				return definition;
+			}
+			if (definition && definition._isReactElement) {
+				return definition;
+			}
+			var type = this.getType(definition);
+		} catch (ex) {
+			return <ErrorMessage message={ ex.message } key={ index } />;
+		}
+
+		var props = Lazy(definition)
+			.omit(["$type", "children"])
+			.defaults({ key: index })
+			.toObject();
+
+		var children = definition.children ?
+			Lazy([definition.children])
+				.flatten()
+				.map(function (child, i) {
+					var childIndex = (index ? index + "-" : "") + i;
+					return this.createElement(child, false, values, childIndex);
+				}.bind(this))
+				.filter(Lazy.identity)
+				.toArray() :
+			[];
+
+		return children.length ?
+			React.createElement(type, props, children) :
+			React.createElement(type, props);
+	},
+	createComponent: function (definition, name) {
+		var self = this;
 		return React.createClass({
 			displayName: name,
-			getProp: function (ref) {
-				var parts = ref.split(".");
-				var props = this.props;
-				for (var part in parts) {
-					if (props) {
-						props = props[parts[part]];
-					}
-				}
-				return props;
-			},
-			replacePropRefs: function (obj, scope) {
-				var copy = Array.isArray(obj) ? [] : {};
-				var match;
-				for (var key in obj) {
-					if (typeof obj[key] === "object" && obj[key] !== null) {
-						if (obj[key].for) {
-							var children = obj[key].do;
-							var forNode = this.replacePropRefs({ for: obj[key].for, value: obj[key].value, index: obj[key].index });
-							copy[key] = [];
-							for (var index in forNode.for) {
-								if (forNode.index) this.props[forNode.index] = index;
-								if (forNode.value) this.props[forNode.value] = forNode.for[index];
-								// TODO: scope
-								copy[key][index] = this.replacePropRefs(children);
-							}
-						}
-						else {
-							copy[key] = this.replacePropRefs(obj[key]);
-						}
-					}
-					else if (match = /^\{(.+)\}$/.exec(obj[key])) {
-						copy[key] = this.getProp(match[1]);
-					}
-					else {
-						copy[key] = obj[key];
-					}
-				}
-				return copy;
-			},
 			render: function () {
-				var withProps = this.replacePropRefs(definition);
-				var res = renderer.createElement(components, withProps);
-				return res;
+				return self.createElement(definition, true, this.props, undefined);
 			}
 		});
 	},
-	createElement: function (components, def, index) {
-		if (def && def.map) {
-			return def.map(this.createElement.bind(this, components));
-		}
-		if (!def || typeof def !== "object") {
-			return def;
-		}
-		if (!def.root) {
-			return null;
-		}
-
-		var isComponent = /^[A-Z]/.exec(def.root);
-		var root = isComponent ? components[def.root] : def.root;
-		if (root === undefined && isComponent) {
-			return "UNKNOWN COMPONENT \"" + def.root + "\"";
-		}
-
-		var props = {};
-		for (var key in def) {
-			if (key !== "root" && key !== "children") {
-				props[key] = def[key];
-			}
-		}
-		props.key = index;
-
-		var children = !isComponent && def.children ?
-			this.createElement(components, def.children) :
-			def.children;
-		var res =  React.createElement(root, props, children);
-		return res;
-	},
 	render: function () {
-		var components = {};
-		for (var key in this.props.components) {
-			components[key] = this.createComponent(components, key);
-		}
-		return (
-			<div>{ this.createElement(components, this.props.data) }</div>
-		);
+		return this.createElement(this.props.data, true, {}, undefined);
 	}
 });
 

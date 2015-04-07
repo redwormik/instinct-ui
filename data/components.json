@@ -1,92 +1,151 @@
 {
 	"Table": {
-		"root": "table",
+		"$type": "table",
 		"style": {
 			"border": "3px solid black"
 		},
 		"children": [
 			{
-				"root": "caption",
-				"children": "{caption}"
+				"$type": "caption",
+				"children": {
+					"$type": "$val",
+					"val": "caption"
+				}
 			},
 			{
-				"for": "{data}",
-				"index": "index",
-				"value": "value",
+				"$type": "$for",
+				"for": "index",
+				"in": {
+					"$type": "$val",
+					"val": "data"
+				},
 				"do": {
-					"root": "TableRow",
-					"data": "{value}"
+					"$type": "TableRow",
+					"data": {
+						"$type": "$index",
+						"index": {
+							"$type": "$val",
+							"val": "index"
+						},
+						"in": {
+							"$type": "$val",
+							"val": "data"
+						}
+					}
 				}
 			}
 		]
 	},
 	"TableRow": {
-		"root": "tr",
+		"$type": "tr",
 		"style": {
 			"background": "#999"
 		},
 		"children": {
-			"for": "{data}",
-			"index": "index",
-			"value": "value",
+			"$type": "$for",
+			"for": "index",
+			"in": {
+				"$type": "$val",
+				"val": "data"
+			},
 			"do": {
-				"root": "TableCell",
-				"children": "{value}"
+				"$type": "TableCell",
+				"children": {
+					"$type": "$index",
+					"index": {
+						"$type": "$val",
+						"val": "index"
+					},
+					"in": {
+						"$type": "$val",
+						"val": "data"
+					}
+				}
 			}
 		}
 	},
 	"TableCell": {
-		"root": "td",
+		"$type": "td",
 		"style": {
 			"border": "1px solid black"
 		},
-		"children": "{children}"
+		"children": {
+			"$type": "$val",
+			"val": "children"
+		}
 	},
 	"AnotherTable": {
-		"root": "Table"
+		"$type": "Table"
 	},
 	"Box": {
-		"root": "div",
+		"$type": "div",
 		"style": {
 			"border": "3px solid black",
 			"float": "left",
 			"padding": "5",
 			"margin": "5",
-			"position": "{style.position}",
-			"top": "{style.top}",
-			"left": "{style.left}"
+			"position": {
+				"$type": "$index",
+				"index": "position",
+				"in": {
+					"$type": "$val",
+					"val": "style"
+				}
+			},
+			"top": {
+				"$type": "$index",
+				"index": "top",
+				"in": {
+					"$type": "$val",
+					"val": "style"
+				}
+			},
+			"left": {
+				"$type": "$index",
+				"index": "left",
+				"in": {
+					"$type": "$val",
+					"val": "style"
+				}
+			}
 		},
 		"children": [
 			{
-				"root": "div",
-				"children": "{name}"
+				"$type": "div",
+				"children": {
+					"$type": "$val",
+					"val": "name"
+				}
 			},
-			"{children}"
+			{
+				"$type": "$val",
+				"val": "children"
+			}
 		]
 	},
 	"Boxes": {
-		"root": "div",
+		"$type": "div",
 		"children": [
 			{
-				"root": "Box",
+				"$type": "Box",
 				"name": "My Box",
 				"children": [
 					{
-						"root": "Box",
+						"$type": "Box",
 						"name": "My Inner Box",
 						"children": {
-							"root": "Box",
+							"$type": "Box",
 							"name": "My Inner Inner Box"
 						}
 					},
 					{
-						"root": "Box",
+						"$type": "Box",
 						"name": "My Second Inner Box"
 					}
 				]
 			},
 			{
-				"root": "div",
+				"$type": "div",
 				"style": {
 					"clear": "both"
 				}
@@ -94,37 +153,55 @@
 		]
 	},
 	"Boxes2": {
-		"root": "Box",
+		"$type": "Box",
 		"name": "NOT NAME",
 		"children": [
 			{
-				"root": "Box",
-				"name": "{name}"
+				"$type": "Box",
+				"name": {
+					"$type": "$val",
+					"val": "name"
+				}
 			}
 		]
 	},
 	"Figure": {
-		"root": "div",
+		"$type": "div",
 		"children": [
-			"{title}",
 			{
-				"root": "br"
+				"$type": "$val",
+				"val": "title"
 			},
 			{
-				"root": "img",
-				"src": "{src}",
-				"alt": "{title}",
-				"title": "{title}"
+				"$type": "br"
+			},
+			{
+				"$type": "img",
+				"src": {
+					"$type": "$val",
+					"val": "src"
+				},
+				"alt": {
+					"$type": "$val",
+					"val": "title"
+				},
+				"title": {
+					"$type": "$val",
+					"val": "title"
+				}
 			}
 		]
 	},
 	"Container": {
-		"root": "div",
+		"$type": "div",
 		"style": {
 			"width": "100%",
 			"height": "600",
 			"position": "relative"
 		},
-		"children": "{children}"
+		"children": {
+			"$type": "$val",
+			"val": "children"
+		}
 	}
 }

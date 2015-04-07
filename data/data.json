@@ -1,8 +1,8 @@
 {
-	"root": "div",
+	"$type": "div",
 	"children": [
 		{
-			"root": "h1",
+			"$type": "h1",
 			"style": {
 				"color": "blue"
 			},
@@ -10,7 +10,7 @@
 			"children": "fooo"
 		},
 		{
-			"root": "Table",
+			"$type": "Table",
 			"caption": "This is a table",
 			"data": [
 				[
@@ -31,47 +31,47 @@
 			]
 		},
 		{
-			"root": "div",
+			"$type": "div",
 			"children": "test"
 		},
 		{
-			"root": "br"
+			"$type": "br"
 		},
 		{
-			"root": "a",
+			"$type": "a",
 			"href": "http://seznam.cz",
 			"target": "_blank",
 			"children": "link"
 		},
 		{
-			"root": "div",
+			"$type": "div",
 			"children": "bar"
 		},
 		{
-			"root": "table",
+			"$type": "table",
 			"children": [
 				{
-					"root": "tr",
+					"$type": "tr",
 					"children": [
 						{
-							"root": "th",
+							"$type": "th",
 							"children": "foo"
 						},
 						{
-							"root": "th",
+							"$type": "th",
 							"children": "bar"
 						}
 					]
 				},
 				{
-					"root": "tr",
+					"$type": "tr",
 					"children": [
 						{
-							"root": "td",
+							"$type": "td",
 							"children": "bar"
 						},
 						{
-							"root": "td",
+							"$type": "td",
 							"children": "foo"
 						}
 					]
@@ -81,21 +81,21 @@
 		"foo",
 		"bar",
 		{
-			"root": "AnotherTable"
+			"$type": "AnotherTable"
 		},
 		{
-			"root": "Boxes"
+			"$type": "Boxes"
 		},
 		{
-			"root": "Figure",
+			"$type": "Figure",
 			"src": "https://placekitten.com/g/200/300",
 			"title": "THE CAT"
 		},
 		{
-			"root": "Container",
+			"$type": "Container",
 			"children": [
 				{
-					"root": "Box",
+					"$type": "Box",
 					"name": "THIS IS A BOX",
 					"style": {
 						"position": "absolute",

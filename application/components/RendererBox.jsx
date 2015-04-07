@@ -1,5 +1,7 @@
 var Ambidex  = require("ambidex");
 var React = require("react");
+
+var JsonEditBox = require("./JsonEditBox.jsx");
 var Renderer = require("./Renderer.jsx");
 
 
@@ -7,23 +9,19 @@ var RendererBox = React.createClass({
 	mixins: [
 		Ambidex.mixinCreators.connectStoresToLocalState(["Components", "Data"])
 	],
-	onComponentsChange: function () {
-		var text = this.refs.components.getDOMNode().value;
-		this.getRefluxAction("updateComponents")(JSON.parse(text));
-	},
-	onDataChange: function () {
-		var text = this.refs.data.getDOMNode().value;
-		this.getRefluxAction("updateData")(JSON.parse(text));
-	},
 	render: function () {
 		return (
-			<div style={{ height: 750 }}>
-				<div style={{ width: "48%", float: "right" }}>
+			<div style={{ height: "100%" }}>
+				<div style={{ width: "49%", float: "right", height: "100%" }}>
 					<Renderer data={ this.state.data } components={ this.state.components } />
 				</div>
-				<div style={{ width: "48%", height: "100%", float: "left" }}>
-					<textarea defaultValue={ JSON.stringify(this.state.components, null, 2) } style={{ width: "100%", height: "50%" }} onChange={ this.onComponentsChange } ref="components" />
-					<textarea defaultValue={ JSON.stringify(this.state.data, null, 2) } style={{ width: "100%", height: "50%" }} onChange={ this.onDataChange } ref="data" />
+				<div style={{ width: "49%", float: "left", height: "100%" }}>
+					<JsonEditBox data={ this.state.components }
+						onChange={ this.getRefluxAction("updateComponents") }
+						style={{ width: "100%", height: "50%" }} />
+					<JsonEditBox data={ this.state.data }
+						onChange={ this.getRefluxAction("updateData") }
+						style={{ width: "100%", height: "50%" }}  />
 				</div>
 				<div style={{ clear: "both" }} />
 			</div>
