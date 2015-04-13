@@ -11,13 +11,14 @@ var RendererBox = React.createClass({
 	],
 	render: function () {
 		var paneStyles = {
-			width: "50vw",
-			height: "100vh",
+			width: "50%",
+			height: "100%",
 			padding: 8,
-			boxSizing: "border-box"
+			boxSizing: "border-box",
+			overflow: "auto"
 		};
 		return (
-			<div>
+			<div style={ this.props.style }>
 				<div style={{ ...paneStyles, float: "left" }}>
 					<JsonEditBox data={ this.state.components }
 						onChange={ this.getRefluxAction("updateComponents") }
@@ -26,7 +27,7 @@ var RendererBox = React.createClass({
 						onChange={ this.getRefluxAction("updateData") }
 						style={{ width: "100%", height: "50%" }} />
 				</div>
-				<div style={{ ...paneStyles, float: "right", overflow: "auto" }}>
+				<div style={{ ...paneStyles, float: "right" }}>
 					<Renderer data={ this.state.data } components={ this.state.components } />
 				</div>
 				<div style={{ clear: "both" }} />

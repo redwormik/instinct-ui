@@ -6,7 +6,7 @@ var RendererBox = require("./RendererBox.jsx");
 var Home = React.createClass({
 	render: function () {
 		return (
-			<RendererBox />
+			<RendererBox style={{ width: "100vw", height: "100vh" }}/>
 		);
 	}
 });
