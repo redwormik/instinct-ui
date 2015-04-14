@@ -1,34 +1,34 @@
 {
 	"Table": {
-		"$type": "table",
+		"root": "table",
 		"style": {
 			"border": "3px solid black"
 		},
 		"children": [
 			{
-				"$type": "caption",
+				"root": "caption",
 				"children": {
-					"$type": "$val",
+					"root": "$val",
 					"val": "caption"
 				}
 			},
 			{
-				"$type": "$for",
+				"root": "$for",
 				"for": "index",
 				"in": {
-					"$type": "$val",
+					"root": "$val",
 					"val": "data"
 				},
 				"do": {
-					"$type": "TableRow",
+					"root": "TableRow",
 					"data": {
-						"$type": "$index",
+						"root": "$index",
 						"index": {
-							"$type": "$val",
+							"root": "$val",
 							"val": "index"
 						},
 						"in": {
-							"$type": "$val",
+							"root": "$val",
 							"val": "data"
 						}
 					}
@@ -37,27 +37,27 @@
 		]
 	},
 	"TableRow": {
-		"$type": "tr",
+		"root": "tr",
 		"style": {
 			"background": "#999"
 		},
 		"children": {
-			"$type": "$for",
+			"root": "$for",
 			"for": "index",
 			"in": {
-				"$type": "$val",
+				"root": "$val",
 				"val": "data"
 			},
 			"do": {
-				"$type": "TableCell",
+				"root": "TableCell",
 				"children": {
-					"$type": "$index",
+					"root": "$index",
 					"index": {
-						"$type": "$val",
+						"root": "$val",
 						"val": "index"
 					},
 					"in": {
-						"$type": "$val",
+						"root": "$val",
 						"val": "data"
 					}
 				}
@@ -65,24 +65,24 @@
 		}
 	},
 	"TableCell": {
-		"$type": "td",
+		"root": "td",
 		"style": {
 			"border": "1px solid black"
 		},
 		"children": {
-			"$type": "$val",
+			"root": "$val",
 			"val": "children"
 		}
 	},
 	"AnotherTable": {
-		"$type": "Table"
+		"root": "Table"
 	},
 	"Box": {
-		"$type": "div",
+		"root": "div",
 		"style": {
-			"$type": "$merge",
+			"root": "$merge",
 			"merge": {
-				"$type": "$val",
+				"root": "$val",
 				"val": "style"
 			},
 			"with": {
@@ -94,41 +94,41 @@
 		},
 		"children": [
 			{
-				"$type": "div",
+				"root": "div",
 				"children": {
-					"$type": "$val",
+					"root": "$val",
 					"val": "name"
 				}
 			},
 			{
-				"$type": "$val",
+				"root": "$val",
 				"val": "children"
 			}
 		]
 	},
 	"Boxes": {
-		"$type": "div",
+		"root": "div",
 		"children": [
 			{
-				"$type": "Box",
+				"root": "Box",
 				"name": "My Box",
 				"children": [
 					{
-						"$type": "Box",
+						"root": "Box",
 						"name": "My Inner Box",
 						"children": {
-							"$type": "Box",
+							"root": "Box",
 							"name": "My Inner Inner Box"
 						}
 					},
 					{
-						"$type": "Box",
+						"root": "Box",
 						"name": "My Second Inner Box"
 					}
 				]
 			},
 			{
-				"$type": "div",
+				"root": "div",
 				"style": {
 					"clear": "both"
 				}
@@ -136,54 +136,54 @@
 		]
 	},
 	"Boxes2": {
-		"$type": "Box",
+		"root": "Box",
 		"name": "NOT NAME",
 		"children": [
 			{
-				"$type": "Box",
+				"root": "Box",
 				"name": {
-					"$type": "$val",
+					"root": "$val",
 					"val": "name"
 				}
 			}
 		]
 	},
 	"Figure": {
-		"$type": "div",
+		"root": "div",
 		"children": [
 			{
-				"$type": "$val",
+				"root": "$val",
 				"val": "title"
 			},
 			{
-				"$type": "br"
+				"root": "br"
 			},
 			{
-				"$type": "img",
+				"root": "img",
 				"src": {
-					"$type": "$val",
+					"root": "$val",
 					"val": "src"
 				},
 				"alt": {
-					"$type": "$val",
+					"root": "$val",
 					"val": "title"
 				},
 				"title": {
-					"$type": "$val",
+					"root": "$val",
 					"val": "title"
 				}
 			}
 		]
 	},
 	"Container": {
-		"$type": "div",
+		"root": "div",
 		"style": {
 			"width": "100%",
 			"height": "600",
 			"position": "relative"
 		},
 		"children": {
-			"$type": "$val",
+			"root": "$val",
 			"val": "children"
 		}
 	}

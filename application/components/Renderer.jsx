@@ -72,7 +72,7 @@ var Renderer = React.createClass({
 			}.bind(this));
 		}
 
-		var type = definition.$type;
+		var type = definition.root;
 		if (!type || !/^\$/.exec(type)) {
 			return Lazy(definition).map(function (def, key) {
 				return [key, this.replaceSyntax(def, values)];
@@ -92,15 +92,15 @@ var Renderer = React.createClass({
 			throw new Error("Element cannot be an array");
 		}
 
-		var type = definition.$type;
+		var type = definition.root;
 
 		if (type === undefined) {
-			throw new Error("Missing $type attribute");
+			throw new Error("Missing root attribute");
 		}
 
 		if (!type || type === null || typeof type === "object" || /^\$/.exec(type)) {
 			var typeString = (typeof type === "string" ?  "\"" + type + "\"" : type);
-			throw new Error("Invalid $type " + typeString);
+			throw new Error("Invalid root " + typeString);
 		}
 
 		if (/^[A-Z]/.exec(type)) {
@@ -128,7 +128,7 @@ var Renderer = React.createClass({
 		}
 
 		var props = Lazy(definition)
-			.omit(["$type", "children"])
+			.omit(["root", "children"])
 			.defaults({ key: index })
 			.toObject();
 
