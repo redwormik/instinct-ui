@@ -26,7 +26,7 @@ var Renderer = React.createClass({
 	$index: function (definition, values) {
 		var index = this.replaceSyntax(definition.index, values);
 		var inVal = this.replaceSyntax(definition.in, values);
-		return inVal && inVal[index];
+		return (inVal === null || inVal === undefined) ? undefined : inVal[index];
 	},
 	$for: function (definition, values) {
 		var forVal = this.replaceSyntax(definition.for, values);
@@ -116,7 +116,7 @@ var Renderer = React.createClass({
 				definition = this.replaceSyntax(definition, values);
 			}
 			else if (definition === null || typeof definition !== "object") {
-				return definition;
+				return (definition === null || definition === undefined) ? '' : definition.toString();
 			}
 			if (definition && definition._isReactElement) {
 				return definition;
