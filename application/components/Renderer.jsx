@@ -98,8 +98,9 @@ var Renderer = React.createClass({
 			throw new Error("Missing $type attribute");
 		}
 
-		if (!type || /^\$/.exec(type)) {
-			throw new Error("Invalid $type \"" + type + "\"");
+		if (!type || type === null || typeof type === "object" || /^\$/.exec(type)) {
+			var typeString = (typeof type === "string" ?  "\"" + type + "\"" : type);
+			throw new Error("Invalid $type " + typeString);
 		}
 
 		if (/^[A-Z]/.exec(type)) {
