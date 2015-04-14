@@ -20,6 +20,7 @@
 	},
 	"scripts": {
 		"start": "node --harmony --max_old_space_size=420 ./index.js",
+		"server": "node --harmony ./server.js",
 		"stop": "killall instinct-ui",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},

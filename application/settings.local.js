@@ -8,6 +8,8 @@ module.exports = Lazy(commonSettings).merge({
 	ENABLE_HOT_MODULE_REPLACEMENT: true,
 	WEBPACK_PORT: "8081",
 	CUSTOM_SETTINGS: {
-		API_BASE_URL: "http://127.0.0.1:8080/api/"
+		RUN_SERVER_WITH_CLIENT: false,
+		API_PORT: 8082,
+		CORS: true
 	}
 }).toObject();
