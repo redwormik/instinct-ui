@@ -30,13 +30,12 @@ function generateValue(result, value, prefix, elements) {
 	if (type === "object") {
 		result[prefix][prefix + "Element"] = generateElement(value, elements);
 	}
-	else if (type === "string") {
-		result[prefix][prefix + "Value"] = value;
-	}
 	else {
-		// number or boolean
-		result[prefix][prefix + "Value"] = Number(value);
-		result[prefix][prefix + "Type"] = type;
+		result[prefix][prefix + "Value"] = value;
+		if (type !== "string") {
+			// number or boolean
+			result[prefix][prefix + "Type"] = type;
+		}
 	}
 	return result;
 }
