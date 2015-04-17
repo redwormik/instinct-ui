@@ -149,11 +149,15 @@ function generatePlaceholder(elements) {
 		elementType: "placeholder",
 		componentName: "_",
 		root: "_",
-		child: { childIndex: "_" },
-		property: { propertyName: "_" }
+		children: [ { child: { childIndex: "_" } } ],
+		properties: [ { property: { propertyName: "_" } } ]
 	};
-	var syntaxProps = Lazy(syntaxProperties).values().flatten();
-	Lazy(["child", "property"]).concat(syntaxProps).each(function (prefix) {
+	Lazy({ children: "child", properties: "property" }).each(function (prefix, field) {
+		element[field][0][prefix][prefix + "Element"] = "_";
+		element[field][0][prefix][prefix + "Value"] = "_";
+		element[field][0][prefix][prefix + "Type"] = "_";
+	});
+	Lazy(syntaxProperties).values().flatten().each(function (prefix) {
 		element[prefix] = element[prefix] || {};
 		element[prefix][prefix + "Element"] = "_";
 		element[prefix][prefix + "Value"] = "_";
