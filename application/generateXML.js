@@ -42,12 +42,17 @@ function generateValue(result, value, prefix, elements) {
 }
 
 function generateChildren(children, elements) {
-	return (Array.isArray(children) ? children : [children]).map(function (child, index) {
+	if (!Array.isArray(children)) {
+		children = [children];
+	}
+	var result = children.map(function (child, index) {
 		var result = { child: { childIndex: index + 1 } };
 		return generateValue(result, child, "child", elements);
 	}).filter(function (result) {
 		return result && result.child;
 	});
+	formatIndices(result, "child");
+	return result;
 }
 
 function generateProperties(definition, omit, elements) {
@@ -126,6 +131,18 @@ function generateElement(definition, elements, name) {
 	return element.elementIndex = elements.push({ element: element });
 }
 
+function formatIndices(elements, prefix) {
+	var length = elements.length.toString().length;
+	elements.forEach(function (el) {
+		if (el[prefix][prefix + "Index"]) {
+			var indexLength = el[prefix][prefix + "Index"].toString().length;
+			for (var i = indexLength; i < length; i++) {
+				el[prefix][prefix + "Index"] = "0" + el[prefix][prefix + "Index"];
+			}
+		}
+	});
+}
+
 function generatePlaceholder(elements) {
 	var element = {
 		// omitting elementIndex so it will not affect GES
@@ -149,6 +166,7 @@ function generatePlaceholder(elements) {
 function generateXML(definition) {
 	var elements = [];
 	generateElement(definition, elements);
+	formatIndices(elements, "element");
 	generatePlaceholder(elements);
 	return XMLBuilder.create({ elements: elements }).toString();
 }
@@ -158,6 +176,7 @@ function generateXMLComponents(data) {
 	Lazy(data).each(function (definition, name) {
 		generateElement(definition, elements, name);
 	});
+	formatIndices(elements, "element");
 	generatePlaceholder(elements);
 	return XMLBuilder.create({ elements: elements }).toString();
 }
