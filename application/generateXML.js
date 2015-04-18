@@ -21,14 +21,14 @@ function getType(definition) {
 	return "tag";
 }
 
-function generateValue(result, value, prefix, elements) {
+function generateValue(result, value, prefix, elements, componentName) {
 	if (value === undefined || value === null) {
-		result[prefix] = null;
+		result[prefix] = prefix;
 		return result;
 	}
 	var type = typeof value;
 	if (type === "object") {
-		result[prefix][prefix + "Element"] = generateElement(value, elements);
+		result[prefix][prefix + "Element"] = generateElement(value, elements, componentName);
 	}
 	else {
 		result[prefix][prefix + "Value"] = value;
@@ -40,13 +40,13 @@ function generateValue(result, value, prefix, elements) {
 	return result;
 }
 
-function generateChildren(children, elements) {
+function generateChildren(children, elements, componentName) {
 	if (!Array.isArray(children)) {
 		children = [children];
 	}
 	var result = children.map(function (child, index) {
 		var result = { child: { childIndex: index + 1 } };
-		return generateValue(result, child, "child", elements);
+		return generateValue(result, child, "child", elements, componentName);
 	}).filter(function (result) {
 		return result && result.child;
 	});
@@ -54,19 +54,19 @@ function generateChildren(children, elements) {
 	return result;
 }
 
-function generateProperties(definition, omit, elements) {
+function generateProperties(definition, omit, elements, componentName) {
 	return Lazy(definition).omit(omit).map(function (value, name) {
 		var result = { property: { propertyName: name } };
-		return generateValue(result, value, "property", elements);
+		return generateValue(result, value, "property", elements, componentName);
 	}).filter(function (result) {
 		return result && result.property;
 	}).toArray();
 }
 
-function generateRenderable(element, definition, elements) {
+function generateRenderable(element, definition, elements, componentName) {
 	element.root = definition.root;
-	element.properties = generateProperties(definition, ["root", "children"], elements);
-	element.children = generateChildren(definition.children, elements);
+	element.properties = generateProperties(definition, ["root", "children"], elements, componentName);
+	element.children = generateChildren(definition.children, elements, componentName);
 	return element;
 }
 
@@ -75,10 +75,10 @@ var syntaxProperties = {
 	"$index": ["index", "in"],
 	"$for": ["for", "in", "do"],
 	"$if": ["if", "then", "else"],
-	"$merge": ["merge", "with"]
+	"$merge": ["merge"]
 };
 
-function generateSyntax(element, definition, elements) {
+function generateSyntax(element, definition, elements, componentName) {
 	if (syntaxProperties[definition.root] === undefined) {
 		throw new Error("Unknown syntax " + definition.root);
 	}
@@ -86,48 +86,63 @@ function generateSyntax(element, definition, elements) {
 	syntaxProperties[definition.root].forEach(function (prop) {
 		var result = {};
 		result[prop] = {};
-		result = generateValue(result, definition[prop], prop, elements);
-		if (result[prop]) {
-			element[prop] = result[prop];
-		}
+		result = generateValue(result, definition[prop], prop, elements, componentName);
+		element[prop] = result[prop];
 	});
 	return element;
 }
 
-function generateObject(element, definition, elements) {
-	element.properties = generateProperties(definition, [], elements);
+function generateObject(element, definition, elements, componentName) {
+	element.properties = generateProperties(definition, [], elements, componentName);
 	return element;
 }
 
-function generateArray(element, definition, elements) {
-	element.children = generateChildren(definition, elements);
+function generateArray(element, definition, elements, componentName) {
+	element.children = generateChildren(definition, elements, componentName);
 	return element;
 }
 
-function generateElement(definition, elements, name) {
+function generateElement(definition, elements, componentName, componentRoot) {
 	var type = getType(definition);
 	var element = { elementIndex: undefined, elementType: type };
-	if (name) {
-		element.componentName = name;
+	if (componentName) {
+		element.componentName = componentName;
+	}
+	else {
+		element.componentRender = "1";
+	}
+	if (componentRoot) {
+		element.componentRoot = "1";
 	}
 	switch (type) {
 		case "tag":
 		case "component":
-			element = generateRenderable(element, definition, elements);
+			element = generateRenderable(element, definition, elements, componentName);
 			break;
 		case "syntax":
-			element = generateSyntax(element, definition, elements);
+			element = generateSyntax(element, definition, elements, componentName);
 			break;
 		case "object":
-			element = generateObject(element, definition, elements);
+			element = generateObject(element, definition, elements, componentName);
 			break;
 		case "array":
-			element = generateArray(element, definition, elements);
+			element = generateArray(element, definition, elements, componentName);
 			break;
 		default:
 			throw new Error("Unknown element type " + type);
 	}
 	return element.elementIndex = elements.push({ element: element });
+}
+
+function addSlashes(elements) {
+	Object.keys(elements).forEach(function (key) {
+		if (elements[key] !== null && typeof elements[key] === "object") {
+			addSlashes(elements[key]);
+		}
+		else if (typeof elements[key] === "string") {
+			elements[key] = elements[key].replace(/"/g, "\\\"");
+		}
+	});
 }
 
 function formatIndices(elements, prefix) {
@@ -142,12 +157,28 @@ function formatIndices(elements, prefix) {
 	});
 }
 
+function formatElementReferences(elements, length) {
+	Object.keys(elements).forEach(function (key) {
+		if (elements[key] !== null && typeof elements[key] === "object") {
+			formatElementReferences(elements[key], length);
+		}
+		else if (key.length >= 7 && key.indexOf("Element", key.length - 7) === key.length - 7) {
+			var referenceLength = elements[key].toString().length;
+			for (var i = referenceLength; i < length; i++) {
+				elements[key] = "0" + elements[key];
+			}
+		}
+	});
+}
+
 function generatePlaceholder(elements) {
 	var element = {
 		// omitting elementIndex so it will not affect GES
 		// (no other way than defining fields)
 		elementType: "placeholder",
 		componentName: "_",
+		componentRender: "_",
+		componentRoot: "_",
 		root: "_",
 		children: [ { child: { childIndex: "_" } } ],
 		properties: [ { property: { propertyName: "_" } } ]
@@ -166,21 +197,26 @@ function generatePlaceholder(elements) {
 	return elements.push({ element: element });
 }
 
+function finalize(elements) {
+	addSlashes(elements);
+	formatIndices(elements, "element");
+	formatElementReferences(elements, elements.length.toString().length);
+	generatePlaceholder(elements);
+}
+
 function generateXML(definition) {
 	var elements = [];
-	generateElement(definition, elements);
-	formatIndices(elements, "element");
-	generatePlaceholder(elements);
+	generateElement(definition, elements, null, true);
+	finalize(elements);
 	return XMLBuilder.create({ elements: elements }).toString();
 }
 
 function generateXMLComponents(data) {
 	var elements = [];
-	Lazy(data).each(function (definition, name) {
-		generateElement(definition, elements, name);
+	Lazy(data).each(function (definition, componentName) {
+		generateElement(definition, elements, componentName, true);
 	});
-	formatIndices(elements, "element");
-	generatePlaceholder(elements);
+	finalize(elements);
 	return XMLBuilder.create({ elements: elements }).toString();
 }
 
