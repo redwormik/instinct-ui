@@ -81,16 +81,18 @@
 		"root": "div",
 		"style": {
 			"root": "$merge",
-			"merge": {
-				"root": "$val",
-				"val": "style"
-			},
-			"with": {
-				"border": "3px solid black",
-				"float": "left",
-				"padding": "5",
-				"margin": "5"
-			}
+			"merge": [
+				{
+					"root": "$val",
+					"val": "style"
+				},
+				{
+					"border": "3px solid black",
+					"float": "left",
+					"padding": "5",
+					"margin": "5"
+				}
+			]
 		},
 		"children": [
 			{

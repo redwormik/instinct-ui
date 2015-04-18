@@ -26,7 +26,7 @@ var Renderer = React.createClass({
 	$index: function (definition, values) {
 		var index = this.replaceSyntax(definition.index, values);
 		var inVal = this.replaceSyntax(definition.in, values);
-		return (inVal === null || inVal === undefined) ? undefined : inVal[index];
+		return (inVal === null || typeof inVal !== "object") ? undefined : inVal[index];
 	},
 	$for: function (definition, values) {
 		var forVal = this.replaceSyntax(definition.for, values);
@@ -51,15 +51,12 @@ var Renderer = React.createClass({
 			this.replaceSyntax(definition.else, values);
 	},
 	$merge: function (definition, values) {
-		var merge = Lazy(this.replaceSyntax(definition.merge, values));
-		var withVal = this.replaceSyntax(definition.with, values);
-		if (!withVal) {
-			return merge.toObject();
+		var merge = this.replaceSyntax(definition.merge, values);
+		if (!Array.isArray(merge)) {
+			return merge;
 		}
-		if (Array.isArray(withVal)) {
-			return merge.merge.apply(merge, withVal).toObject();
-		}
-		return merge.merge(withVal).toObject();
+		var result = Lazy({});
+		return result.merge.apply(result, merge).toObject();
 	},
 	replaceSyntax: function (definition, values) {
 		if (definition === null || typeof definition !== "object") {
@@ -117,7 +114,7 @@ var Renderer = React.createClass({
 				definition = this.replaceSyntax(definition, values);
 			}
 			else if (definition === null || typeof definition !== "object") {
-				return (definition === null || definition === undefined) ? '' : definition.toString();
+				return definition;
 			}
 			if (definition && definition._isReactElement) {
 				return definition;
