@@ -92,6 +92,26 @@
 			"title": "THE CAT"
 		},
 		{
+			"root": "RList",
+			"data": [
+				1,
+				2,
+				[
+					"foo",
+					"bar"
+				],
+				[
+					3,
+					[
+						4,
+						[
+							5
+						]
+					]
+				]
+			]
+		},
+		{
 			"root": "Container",
 			"children": [
 				{

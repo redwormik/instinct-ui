@@ -188,5 +188,47 @@
 			"root": "$val",
 			"val": "children"
 		}
+	},
+	"RList": {
+		"root": "$if",
+		"if": {
+			"root": "$for",
+			"in": {
+				"root": "$val",
+				"val": "data"
+			}
+		},
+		"then": {
+			"root": "ul",
+			"children": {
+				"root": "$for",
+				"for": "i",
+				"in": {
+					"root": "$val",
+					"val": "data"
+				},
+				"do": {
+					"root": "RList",
+					"data": {
+						"root": "$index",
+						"index": {
+							"root": "$val",
+							"val": "i"
+						},
+						"in": {
+							"root": "$val",
+							"val": "data"
+						}
+					}
+				}
+			}
+		},
+		"else": {
+			"root": "li",
+			"children": {
+				"root": "$val",
+				"val": "data"
+			}
+		}
 	}
 }
