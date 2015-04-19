@@ -1,0 +1,305 @@
+{
+  "Box": {
+    "root": "div",
+    "style": {
+      "root": "$merge",
+      "merge": {
+        "root": "$val",
+        "val": "style"
+      },
+      "with": {
+        "border": "3px solid black",
+        "float": "left",
+        "padding": "5",
+        "margin": "5"
+      }
+    },
+    "children": [
+      {
+        "root": "div",
+        "children": {
+          "root": "$val",
+          "val": "name"
+        }
+      },
+      {
+        "root": "$val",
+        "val": "children"
+      }
+    ]
+  },
+  "XMLTest": {
+    "root": "div",
+    "title": "Title",
+    "tabIndex": 1,
+    "draggable": true,
+    "hidden": false,
+    "style": {
+      "color": "red"
+    },
+    "children": [
+      "XMLTest",
+      [
+        "foo",
+        "bar"
+      ],
+      {
+        "root": "Box",
+        "name": "Box"
+      },
+      {
+        "root": "$val",
+        "val": "val"
+      },
+      {
+        "root": "$val",
+        "val": {
+          "root": "$val",
+          "val": "val"
+        }
+      },
+      {
+        "root": "$index",
+        "index": "2",
+        "in": [
+          6,
+          66,
+          666
+        ]
+      },
+      {
+        "root": "$index",
+        "index": "x",
+        "in": {
+          "x": "y"
+        }
+      },
+      {
+        "root": "$for",
+        "for": "val",
+        "in": [
+          0,
+          1,
+          2
+        ],
+        "do": {
+          "root": "$val",
+          "val": "val"
+        }
+      },
+      {
+        "root": "$for",
+        "for": "val",
+        "in": {
+          "root": "$val",
+          "val": "arr"
+        },
+        "do": {
+          "root": "$index",
+          "index": {
+            "root": "$val",
+            "val": "val"
+          },
+          "in": {
+            "root": "$val",
+            "val": "arr"
+          }
+        }
+      },
+      {
+        "root": "$for",
+        "in": [
+          0,
+          0
+        ],
+        "do": "foo"
+      },
+      {
+        "root": "$for",
+        "in": [
+          0,
+          0
+        ],
+        "do": 1
+      },
+      {
+        "root": "$for",
+        "in": [
+          0,
+          0
+        ],
+        "do": true
+      },
+      {
+        "root": "$for",
+        "in": [
+          0,
+          0
+        ],
+        "do": [
+          7,
+          8
+        ]
+      },
+      {
+        "root": "Box",
+        "name": "Box",
+        "style": {
+          "root": "$for",
+          "for": "key",
+          "in": {
+            "root": "$val",
+            "val": "styles"
+          },
+          "do": {
+            "root": "$index",
+            "index": {
+              "root": "$val",
+              "val": "key"
+            },
+            "in": {
+              "root": "$val",
+              "val": "styles"
+            }
+          }
+        }
+      },
+      {
+        "root": "List",
+        "data": {
+          "root": "$for",
+          "for": "val",
+          "in": {
+            "root": "$val",
+            "val": "arr"
+          },
+          "do": {
+            "name": {
+              "root": "$val",
+              "val": "val"
+            },
+            "value": {
+              "root": "$index",
+              "index": {
+                "root": "$val",
+                "val": "val"
+              },
+              "in": {
+                "root": "$val",
+                "val": "arr"
+              }
+            }
+          }
+        }
+      },
+      {
+        "root": "$if",
+        "if": true,
+        "then": true,
+        "else": false
+      },
+      {
+        "root": "$if",
+        "if": "",
+        "then": "true",
+        "else": "false"
+      },
+      {
+        "root": "$if",
+        "if": 42,
+        "then": 1,
+        "else": 0
+      },
+      {
+        "root": "$if",
+        "if": 0,
+        "then": 1,
+        "else": 0
+      },
+      {
+        "root": "$if",
+        "if": [],
+        "then": [
+          "true"
+        ],
+        "else": [
+          "false"
+        ]
+      },
+      {
+        "root": "$if",
+        "if": {},
+        "then": {
+          "root": "div",
+          "children": "true"
+        },
+        "else": {
+          "root": "div",
+          "children": "false"
+        }
+      },
+      {
+        "root": "$if",
+        "if": {
+          "root": "$val",
+          "val": "val"
+        },
+        "then": {
+          "root": "$val",
+          "val": "val"
+        },
+        "else": {
+          "root": "$val",
+          "val": "foo"
+        }
+      }
+    ]
+  },
+  "List": {
+    "root": "ul",
+    "children": {
+      "root": "$for",
+      "for": "i",
+      "in": {
+        "root": "$val",
+        "val": "data"
+      },
+      "do": {
+        "root": "li",
+        "children": [
+          {
+            "root": "$index",
+            "index": "name",
+            "in": {
+              "root": "$index",
+              "index": {
+                "root": "$val",
+                "val": "i"
+              },
+              "in": {
+                "root": "$val",
+                "val": "data"
+              }
+            }
+          },
+          " => ",
+          {
+            "root": "$index",
+            "index": "value",
+            "in": {
+              "root": "$index",
+              "index": {
+                "root": "$val",
+                "val": "i"
+              },
+              "in": {
+                "root": "$val",
+                "val": "data"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
