@@ -1,86 +1,4 @@
 {
-	"Everything": {
-		"root": "div",
-		"children": {
-			"root": "$val",
-			"val": "children"
-		}
-	},
-	"Table": {
-		"root": "table",
-		"style": {
-			"border": "3px solid black"
-		},
-		"children": [
-			{
-				"root": "caption",
-				"children": {
-					"root": "$val",
-					"val": "caption"
-				}
-			},
-			{
-				"root": "$for",
-				"for": "index",
-				"in": {
-					"root": "$val",
-					"val": "data"
-				},
-				"do": {
-					"root": "TableRow",
-					"data": {
-						"root": "$index",
-						"index": {
-							"root": "$val",
-							"val": "index"
-						},
-						"in": {
-							"root": "$val",
-							"val": "data"
-						}
-					}
-				}
-			}
-		]
-	},
-	"TableRow": {
-		"root": "tr",
-		"style": {
-			"background": "#999"
-		},
-		"children": {
-			"root": "$for",
-			"for": "index",
-			"in": {
-				"root": "$val",
-				"val": "data"
-			},
-			"do": {
-				"root": "TableCell",
-				"children": {
-					"root": "$index",
-					"index": {
-						"root": "$val",
-						"val": "index"
-					},
-					"in": {
-						"root": "$val",
-						"val": "data"
-					}
-				}
-			}
-		}
-	},
-	"TableCell": {
-		"root": "td",
-		"style": {
-			"border": "1px solid black"
-		},
-		"children": {
-			"root": "$val",
-			"val": "children"
-		}
-	},
 	"Box": {
 		"root": "div",
 		"style": {
@@ -112,126 +30,277 @@
 			}
 		]
 	},
-	"Boxes": {
+	"XMLTest": {
 		"root": "div",
+		"title": "Title",
+		"tabIndex": 1,
+		"draggable": true,
+		"hidden": false,
+		"style": {
+			"color": "red"
+		},
 		"children": [
+			"XMLTest",
+			[
+				"foo",
+				"bar"
+			],
 			{
 				"root": "Box",
-				"name": "My Box",
-				"children": [
-					{
-						"root": "Box",
-						"name": "My Inner Box",
-						"children": {
-							"root": "Box",
-							"name": "My Inner Inner Box"
-						}
-					},
-					{
-						"root": "Box",
-						"name": "My Second Inner Box"
-					}
+				"name": "Box"
+			},
+			{
+				"root": "$val",
+				"val": "val"
+			},
+			{
+				"root": "$val",
+				"val": {
+					"root": "$val",
+					"val": "val"
+				}
+			},
+			{
+				"root": "$index",
+				"index": "2",
+				"in": [
+					6,
+					66,
+					666
 				]
 			},
 			{
-				"root": "div",
-				"style": {
-					"clear": "both"
+				"root": "$index",
+				"index": "x",
+				"in": {
+					"x": "y"
 				}
-			}
-		]
-	},
-	"Boxes2": {
-		"root": "Box",
-		"name": "NOT NAME",
-		"children": [
-			{
-				"root": "Box",
-				"name": {
-					"root": "$val",
-					"val": "name"
-				}
-			}
-		]
-	},
-	"Figure": {
-		"root": "div",
-		"children": [
-			{
-				"root": "$val",
-				"val": "title"
 			},
 			{
-				"root": "br"
-			},
-			{
-				"root": "img",
-				"src": {
-					"root": "$val",
-					"val": "src"
-				},
-				"alt": {
-					"root": "$val",
-					"val": "title"
-				},
-				"title": {
-					"root": "$val",
-					"val": "title"
-				}
-			}
-		]
-	},
-	"Container": {
-		"root": "div",
-		"style": {
-			"width": "100%",
-			"height": "600",
-			"position": "relative"
-		},
-		"children": {
-			"root": "$val",
-			"val": "children"
-		}
-	},
-	"RList": {
-		"root": "$if",
-		"if": {
-			"root": "$for",
-			"in": {
-				"root": "$val",
-				"val": "data"
-			}
-		},
-		"then": {
-			"root": "ul",
-			"children": {
 				"root": "$for",
-				"for": "i",
+				"for": "val",
+				"in": [
+					0,
+					1,
+					2
+				],
+				"do": {
+					"root": "$val",
+					"val": "val"
+				}
+			},
+			{
+				"root": "$for",
+				"for": "val",
 				"in": {
 					"root": "$val",
-					"val": "data"
+					"val": "arr"
 				},
 				"do": {
-					"root": "RList",
-					"data": {
+					"root": "$index",
+					"index": {
+						"root": "$val",
+						"val": "val"
+					},
+					"in": {
+						"root": "$val",
+						"val": "arr"
+					}
+				}
+			},
+			{
+				"root": "$for",
+				"in": [
+					0,
+					0
+				],
+				"do": "foo"
+			},
+			{
+				"root": "$for",
+				"in": [
+					0,
+					0
+				],
+				"do": 1
+			},
+			{
+				"root": "$for",
+				"in": [
+					0,
+					0
+				],
+				"do": true
+			},
+			{
+				"root": "$for",
+				"in": [
+					0,
+					0
+				],
+				"do": [
+					7,
+					8
+				]
+			},
+			{
+				"root": "Box",
+				"name": "Box",
+				"style": {
+					"root": "$for",
+					"for": "key",
+					"in": {
+						"root": "$val",
+						"val": "styles"
+					},
+					"do": {
 						"root": "$index",
 						"index": {
 							"root": "$val",
-							"val": "i"
+							"val": "key"
 						},
 						"in": {
 							"root": "$val",
-							"val": "data"
+							"val": "styles"
 						}
 					}
 				}
+			},
+			{
+				"root": "List",
+				"data": {
+					"root": "$for",
+					"for": "val",
+					"in": {
+						"root": "$val",
+						"val": "arr"
+					},
+					"do": {
+						"name": {
+							"root": "$val",
+							"val": "val"
+						},
+						"value": {
+							"root": "$index",
+							"index": {
+								"root": "$val",
+								"val": "val"
+							},
+							"in": {
+								"root": "$val",
+								"val": "arr"
+							}
+						}
+					}
+				}
+			},
+			{
+				"root": "$if",
+				"if": true,
+				"then": true,
+				"else": false
+			},
+			{
+				"root": "$if",
+				"if": "",
+				"then": "true",
+				"else": "false"
+			},
+			{
+				"root": "$if",
+				"if": 42,
+				"then": 1,
+				"else": 0
+			},
+			{
+				"root": "$if",
+				"if": 0,
+				"then": 1,
+				"else": 0
+			},
+			{
+				"root": "$if",
+				"if": [],
+				"then": [
+					"true"
+				],
+				"else": [
+					"false"
+				]
+			},
+			{
+				"root": "$if",
+				"if": {},
+				"then": {
+					"root": "div",
+					"children": "true"
+				},
+				"else": {
+					"root": "div",
+					"children": "false"
+				}
+			},
+			{
+				"root": "$if",
+				"if": {
+					"root": "$val",
+					"val": "val"
+				},
+				"then": {
+					"root": "$val",
+					"val": "val"
+				},
+				"else": {
+					"root": "$val",
+					"val": "foo"
+				}
 			}
-		},
-		"else": {
-			"root": "li",
-			"children": {
+		]
+	},
+	"List": {
+		"root": "ul",
+		"children": {
+			"root": "$for",
+			"for": "i",
+			"in": {
 				"root": "$val",
 				"val": "data"
+			},
+			"do": {
+				"root": "li",
+				"children": [
+					{
+						"root": "$index",
+						"index": "name",
+						"in": {
+							"root": "$index",
+							"index": {
+								"root": "$val",
+								"val": "i"
+							},
+							"in": {
+								"root": "$val",
+								"val": "data"
+							}
+						}
+					},
+					" => ",
+					{
+						"root": "$index",
+						"index": "value",
+						"in": {
+							"root": "$index",
+							"index": {
+								"root": "$val",
+								"val": "i"
+							},
+							"in": {
+								"root": "$val",
+								"val": "data"
+							}
+						}
+					}
+				]
 			}
 		}
 	}
