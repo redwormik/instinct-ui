@@ -15,7 +15,7 @@ module.exports = new Ambidex({
 	settings: settings,
 	middlewareInjector: function (stack) {
 		stack.get("/wakemydyno.txt", function () {
-			return '';
+			return "";
 		});
 		stack.map(settings.CUSTOM_SETTINGS.STATIC_URL, mach.file(__dirname + "/static"));
 		if (settings.CUSTOM_SETTINGS.RUN_SERVER_WITH_CLIENT) {

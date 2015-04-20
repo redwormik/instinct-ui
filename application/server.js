@@ -15,7 +15,7 @@ if (settings.CUSTOM_SETTINGS.CORS) {
 	app.use(function (app) {
 		return function (conn) {
 			return conn.call(app).then(function () {
-				conn.response.setHeader('Access-Control-Allow-Origin', '*');
+				conn.response.setHeader("Access-Control-Allow-Origin", "*");
 			});
 		}
 	});

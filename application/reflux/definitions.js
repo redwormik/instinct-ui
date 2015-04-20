@@ -1,19 +1,19 @@
 var throttle = require("../throttle.js");
+var assign = Object.assign || require("react/lib/Object.assign.js");
 
 
 module.exports = {
 	Components: {
 		actions: ["getComponents", "updateComponents"],
-		store: Object.assign({
-			counter: 0,
+		store: assign({
 			init: function () {
 				this.state = {};
 			},
 			onGetComponents: function () {
-				this.getFromAPI("components.json").then(data => {
+				this.getFromAPI("components.json").then(function (data) {
 					this.state = data;
 					this.trigger(this.state);
-				});
+				}.bind(this));
 			},
 			onUpdateComponents: function (components) {
 				this.state = components;
@@ -32,15 +32,15 @@ module.exports = {
 	},
 	Data: {
 		actions: ["getData", "updateData"],
-		store: Object.assign({
+		store: assign({
 			init: function () {
 				this.state = {};
 			},
 			onGetData: function () {
-				this.getFromAPI("data.json").then(data => {
+				this.getFromAPI("data.json").then(function (data) {
 					this.state = data;
 					this.trigger(this.state);
-				});
+				}.bind(this));
 			},
 			onUpdateData: function (data) {
 				this.state = data;
@@ -58,13 +58,10 @@ module.exports = {
 		)
 	},
 	Root: {
-		actions: ["getRoot", "updateRoot"],
+		actions: ["updateRoot"],
 		store: {
 			init: function () {
 				this.state = "";
-			},
-			onGetRoot: function () {
-				this.trigger(this.state);
 			},
 			onUpdateRoot: function (root) {
 				this.state = root;
