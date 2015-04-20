@@ -56,5 +56,20 @@ module.exports = {
 			require("./mixins/getFromAPI.js"),
 			require("./mixins/sendToAPI.js")
 		)
+	},
+	Root: {
+		actions: ["getRoot", "updateRoot"],
+		store: {
+			init: function () {
+				this.state = "";
+			},
+			onGetRoot: function () {
+				this.trigger(this.state);
+			},
+			onUpdateRoot: function (root) {
+				this.state = root;
+				this.trigger(this.state);
+			}
+		}
 	}
 };

@@ -161,7 +161,10 @@ var Renderer = React.createClass({
 		});
 	},
 	render: function () {
-		return this.createElement(this.props.data, true, {}, undefined);
+		var root = this.state.components[this.props.root];
+		return root ? React.createElement(root, this.props.data) : (
+			<ErrorMessage message={ "Unknown component \"" + this.props.root + "\"" } />
+		);
 	}
 });
 

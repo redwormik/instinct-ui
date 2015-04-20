@@ -6,5 +6,9 @@ module.exports = [
 	{
 		actionName: "getData",
 		storeName: "Data"
+	},
+	{
+		actionName: "getRoot",
+		storeName: "Root"
 	}
 ];

@@ -1,4 +1,11 @@
 {
+	"Everything": {
+		"root": "div",
+		"children": {
+			"root": "$val",
+			"val": "children"
+		}
+	},
 	"Table": {
 		"root": "table",
 		"style": {
