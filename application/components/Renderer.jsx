@@ -95,6 +95,7 @@ var Renderer = React.createClass({
 			throw new Error("Missing root attribute");
 		}
 
+		// TODO: check type value
 		if (!type || type === null || typeof type === "object" || /^\$/.exec(type)) {
 			var typeString = (typeof type === "string" ?  "\"" + type + "\"" : type);
 			throw new Error("Invalid root " + typeString);
@@ -109,6 +110,7 @@ var Renderer = React.createClass({
 		return type;
 	},
 	createElement: function (definition, isRoot, values, index) {
+		var type;
 		try {
 			if (isRoot) {
 				definition = this.replaceSyntax(definition, values);
@@ -116,10 +118,10 @@ var Renderer = React.createClass({
 			else if (definition === null || typeof definition !== "object") {
 				return definition;
 			}
-			if (definition && definition._isReactElement) {
-				return definition;
+			if (React.isValidElement(definition)) {
+				throw new Error("Element already created!");
 			}
-			var type = this.getType(definition);
+			type = this.getType(definition);
 		} catch (ex) {
 			return <ErrorMessage message={ ex.message } key={ index } />;
 		}
@@ -129,20 +131,25 @@ var Renderer = React.createClass({
 			.defaults({ key: index })
 			.toObject();
 
-		var children = definition.children ?
-			Lazy([definition.children])
-				.flatten()
-				.map(function (child, i) {
-					var childIndex = (index ? index + "-" : "") + i;
-					return this.createElement(child, false, values, childIndex);
-				}.bind(this))
-				.filter(Lazy.identity)
-				.toArray() :
-			[];
+		var children = definition.children;
+		var empty = children === null || children === undefined || children === "" ||
+			(Array.isArray(children) && children.length === 0);
 
-		return children.length > 0 ?
-			React.createElement(type, props, children.length === 1 ? children[0] : children) :
-			React.createElement(type, props);
+		if (!empty && typeof type !== "function") { // not a component
+			children = Lazy([children]).flatten()
+				.map(function (child, i) {
+					return this.createElement(child, false, values, i);
+				}.bind(this))
+				.filter(function (child) {
+					return child !== null && child !== undefined && child !== "";
+				}).toArray();
+			empty = children.length === 0;
+		}
+
+		var onlyChild = Array.isArray(children) && children.length === 1;
+
+		return empty ? React.createElement(type, props) :
+			React.createElement(type, props, onlyChild ? children[0] : children);
 	},
 	createComponent: function (definition, name) {
 		var self = this;
