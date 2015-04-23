@@ -1,5 +1,6 @@
 var React = require("react");
 var Lazy = require("lazy.js");
+var assign = Object.assign || require("react/lib/Object.assign.js");
 
 var ErrorMessage = require("./ErrorMessage.jsx");
 
@@ -161,10 +162,9 @@ var Renderer = React.createClass({
 		});
 	},
 	render: function () {
-		var root = this.state.components[this.props.root];
-		return root ? React.createElement(root, this.props.data) : (
-			<ErrorMessage message={ "Unknown component \"" + this.props.root + "\"" } />
-		);
+		var definition = assign({}, this.props.data);
+		definition.root = this.props.root;
+		return this.createElement(definition, true, {}, undefined);
 	}
 });
 
