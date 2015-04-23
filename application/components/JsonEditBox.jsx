@@ -1,4 +1,5 @@
 var React = require("react");
+var neon = require("neon-js");
 
 var ErrorMessage = require("./ErrorMessage.jsx");
 
@@ -25,20 +26,27 @@ var JsonEditBox = React.createClass({
 	dump: function (data) {
 		return JSON.stringify(data, null, 2);
 	},
+	processNeon: function (data) {
+		if (!(data instanceof neon.Map)) {
+			return data;
+		}
+		var values = data.isList() && data.length > 0 ? [] : {};
+		data.forEach(function (key, value) {
+			values[key] = this.processNeon(value);
+		}.bind(this));
+		return values;
+	},
 	handleChange: function () {
 		var text = this.refs.text.getDOMNode().value;
 		try {
-			var obj = JSON.parse(text);
+			var data = this.processNeon(neon.decode(text));
 			this.setState({ text: text, error: null, textToBe: null });
-			this.props.onChange(obj);
+			this.props.onChange(data);
 		} catch (ex) {
-			if (ex instanceof SyntaxError && ex.message.startsWith("JSON.parse: ")) {
-				var message = ex.message.slice(12, ex.message.endsWith(" of the JSON data") ? -17 : undefined);
-				this.setState({ text: text, error: message, textToBe: null });
-			}
-			else {
+			if (ex instanceof neon.Error)
+				this.setState({ text: text, error: ex.message, textToBe: null });
+			else
 				throw ex;
-			}
 		}
 	},
 	handleFocus: function () {
