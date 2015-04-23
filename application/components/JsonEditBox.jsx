@@ -5,12 +5,25 @@ var ErrorMessage = require("./ErrorMessage.jsx");
 
 var JsonEditBox = React.createClass({
 	getInitialState: function () {
-		return { text: JSON.stringify(this.props.data, null, 2), error: null, textToBe: null }
+		return {
+			text: this.dump(this.props.data),
+			error: null,
+			textToBe: null,
+			focused: false
+		};
 	},
 	componentWillReceiveProps: function (nextProps) {
 		if (this.props.data !== nextProps.data) {
-			this.setState({ textToBe: JSON.stringify(nextProps.data, null, 2) });
+			if (this.state.focused) {
+				this.setState({ textToBe: this.dump(nextProps.data) });
+			}
+			else {
+				this.setState({ text: this.dump(nextProps.data), textToBe: null });
+			}
 		}
+	},
+	dump: function (data) {
+		return JSON.stringify(data, null, 2);
 	},
 	handleChange: function () {
 		var text = this.refs.text.getDOMNode().value;
@@ -28,9 +41,15 @@ var JsonEditBox = React.createClass({
 			}
 		}
 	},
+	handleFocus: function () {
+		this.setState({ focused: true });
+	},
 	handleBlur: function() {
 		if (this.state.textToBe) {
-			this.setState({ text: this.state.textToBe, textToBe: null });
+			this.setState({ text: this.state.textToBe, textToBe: null, focused: false });
+		}
+		else {
+			this.setState({ focused: false });
 		}
 	},
 	render: function () {
@@ -42,8 +61,8 @@ var JsonEditBox = React.createClass({
 		return (
 			<div style={ this.props.style }>
 				<ErrorMessage style={ errorStyle } message={ this.state.error } />
-				<textarea ref="text" value={ this.state.text }
-					onChange={ this.handleChange } onBlur={ this.handleBlur }
+				<textarea ref="text" value={ this.state.text } autoComplete="off"
+					onChange={ this.handleChange } onFocus={ this.handleFocus } onBlur={ this.handleBlur }
 					style={{ width: "100%", height: "calc(100% - 30px)", boxSizing: "border-box" }} />
 			</div>
 		);

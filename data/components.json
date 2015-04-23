@@ -81,9 +81,6 @@
 			"val": "children"
 		}
 	},
-	"AnotherTable": {
-		"root": "Table"
-	},
 	"Box": {
 		"root": "div",
 		"style": {
