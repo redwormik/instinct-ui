@@ -132,22 +132,21 @@ var Renderer = React.createClass({
 			.defaults({ key: index })
 			.toObject();
 
+		var isComponent = typeof type === "function"
+
 		var children = definition.children;
-		var empty = children === null || children === undefined || children === "" ||
-			(Array.isArray(children) && children.length === 0);
-
-		if (!empty && typeof type !== "function") { // not a component
-			children = Lazy([children]).flatten()
-				.map(function (child, i) {
-					return this.createElement(child, false, values, i);
-				}.bind(this))
-				.filter(function (child) {
-					return child !== null && child !== undefined && child !== "";
-				}).toArray();
-			empty = children.length === 0;
+		children = Lazy([children]).flatten();
+		if (!isComponent) {
+			children = children.map(function (child, i) {
+				return this.createElement(child, false, values, i);
+			}.bind(this))
 		}
+		children = children.filter(function (child) {
+			return child !== null && child !== undefined && child !== "";
+		}).toArray();
 
-		var onlyChild = Array.isArray(children) && children.length === 1;
+		var empty = children.length === 0;
+		var onlyChild = !isComponent && children.length === 1;
 
 		return empty ? React.createElement(type, props) :
 			React.createElement(type, props, onlyChild ? children[0] : children);
