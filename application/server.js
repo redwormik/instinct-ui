@@ -36,9 +36,18 @@ app.get("/data.json", function (conn) {
 	return conn.file({ path: file });
 });
 
-app.get("/data.xml", function (conn) {
+app.get("/data/:component.xml", function (conn) {
 	var file = __dirname + "/../data/data.json";
-	return readFile(file).then(JSON.parse).then(xml.generateXML);
+	return readFile(file).then(JSON.parse).then(function (data) {
+		var component = conn.params.component;
+		if (data[component]) {
+			data[component].root = component;
+			return xml.generateXML(data[component]);
+		}
+		else {
+			conn.text(404, 'Component not found');
+		}
+	});
 });
 
 app.post("/components.json", function (conn) {
