@@ -42,7 +42,7 @@ function generateValue(result, value, prefix, elements, componentName) {
 
 function generateChildren(children, elements, componentName) {
 	if (!Array.isArray(children)) {
-		children = [children];
+		children = children === undefined || children === null ? [] : [children];
 	}
 	var result = children.map(function (child, index) {
 		var result = { child: { childIndex: index + 1 } };
