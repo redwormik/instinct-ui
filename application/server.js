@@ -31,26 +31,27 @@ BadRequestError.prototype = Object.create(Error.prototype);
 BadRequestError.prototype.constructor = BadRequestError;
 
 
-function get(path, handler) {
-	return app.get(path, function (conn) {
-		return handler(conn).catch(BadRequestError, function (error) {
-			conn.text(error.code, error.message);
-		});
-	});
-}
-
-
-function post(path, handler) {
-	return app.post(path, function (conn) {
-		return handler(conn).catch(BadRequestError, function (error) {
-			conn.text(error.code, error.message);
-		});
-	});
-}
-
-
 function jsonFile(type) {
 	return __dirname + "/../data/" + type + ".json";
+}
+
+
+function getFromParams(conn, type, singular) {
+	var paramTypes = {};
+	var key = singular && type[type.length - 1] === "s" ?
+		type.substr(0, type.length - 1) :
+		type;
+	paramTypes[key] = String;
+	return conn.getParams(paramTypes).then(function (params) {
+		if (params[key] === undefined) {
+			throw new BadRequestError("Missing parameter: " + key);
+		}
+		try {
+			return JSON.parse(params[key]);
+		} catch (error) {
+			throw new BadRequestError(error.message);
+		}
+	});
 }
 
 
@@ -68,56 +69,116 @@ function readJson(type, name) {
 }
 
 
-function writeJson(conn, type) {
+function writeJson(conn, type, name) {
 	var file = jsonFile(type);
-	var paramTypes = {};
-	paramTypes[type] = String;
 
-	return conn.getParams(paramTypes).then(function (params) {
-		try {
-			return JSON.parse(params[type]);
-		} catch (error) {
-			throw new BadRequestError(error.message);
-		}
+	return getFromParams(conn, type, name).then(function (data) {
+		return name ? readJson(type).then(function (oldData) {
+			oldData[name] = data;
+			return oldData;
+		}) : data;
 	}).then(function (data) {
 		return writeFile(file, JSON.stringify(data, null, "\t") + "\n");
-	}).then(function () {
-		return conn.file({ path: file });
 	});
 }
 
 
-function readXml(type, name) {
-	return readJson(type, name).then(function (data) {
-		var params = {};
-		if (name) {
-			params[type] = {};
-			params[type][name] = data;
-		}
-		else {
-			params[type] = data;
-		}
-		return generateXML(params);
+function deleteJson(type, name) {
+	var file = jsonFile(type);
+
+	return readJson(type).then(function (data) {
+		delete data[name];
+		return writeFile(file, JSON.stringify(data, null, "\t") + "\n");
 	});
 }
 
 
-["components", "data"].forEach(function (type) {
+function readXml(types, name) {
+	var data = {};
+
+	return when.all(types.map(function (type) {
+		return readJson(type, name).then(function (typeData) {
+			if (name) {
+				data[type] = {};
+				data[type][name] = typeData;
+			}
+			else {
+				data[type] = typeData;
+			}
+		});
+	})).then(function () {
+		return generateXML(data);
+	});
+}
+
+
+var routes = ["get", "post", "put", "delete"].reduce(function (memo, method) {
+	memo[method] = function (path, handler) {
+		return app[method](path, function (conn) {
+			return handler(conn).catch(BadRequestError, function (error) {
+				conn.text(error.code, error.message);
+			});
+		});
+	}
+
+	return memo;
+}, {});
+
+
+var types = ["components", "data"];
+
+types.forEach(function (type) {
+	// app.get - not a promise
 	app.get("/" + type + ".json", function (conn) {
 		conn.file({ path: jsonFile(type) });
 	});
 
-	post("/" + type + ".json", function (conn) {
-		return writeJson(conn, type);
+	routes.get("/" + type + "/:name.json", function(conn) {
+		return readJson(type, conn.params.name).then(function (data) {
+			conn.json(data);
+		});
 	});
 
-	get("/" + type + ".xml", function (conn) {
-		return readXml(type);
+	routes.post("/" + type + ".json", function (conn) {
+		return writeJson(conn, type).then(function () {
+			conn.file({ path: jsonFile(type) });
+		});
 	});
 
-	get("/" + type + "/:name.xml", function (conn) {
-		return readXml(type, conn.params.name);
+	routes.post("/" + type + "/:name.json", function(conn) {
+		return writeJson(conn, type, conn.params.name).then(function () {
+			return readJson(type, name);
+		}).then(function (data) {
+			conn.json(data);
+		});
 	});
+
+	// app.delete - not a promise
+	app.delete("/" + type + ".json", function (conn) {
+		conn.text(403, 'Forbidden'); // I'm afraid I can't do that.
+	});
+
+	routes.delete("/" + type + "/:name.json", function (conn) {
+		return deleteJson(type, conn.params.name).then(function () {
+			conn.file({ path: jsonFile(type) });
+		});
+	});
+
+	routes.get("/" + type + ".xml", function (conn) {
+		return readXml([type]);
+	});
+
+	routes.get("/" + type + "/:name.xml", function (conn) {
+		return readXml([type], conn.params.name, conn);
+	});
+});
+
+routes.get("/all.xml", function (conn) {
+	return readXml(types);
+});
+
+routes.get("/:name.xml", function (conn) {
+	return readXml(types, conn.params.name);
 });
 
 module.exports = app;
