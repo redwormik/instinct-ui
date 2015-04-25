@@ -204,23 +204,18 @@ function finalize(elements) {
 	generatePlaceholder(elements);
 }
 
-function generateXML(definition) {
+function generateXML(data) {
 	var elements = [];
-	generateElement(definition, elements, null, true);
-	finalize(elements);
-	return XMLBuilder.create({ elements: elements }).toString();
-}
-
-function generateXMLComponents(data) {
-	var elements = [];
-	Lazy(data).each(function (definition, componentName) {
+	Lazy(data.components || {}).each(function (definition, componentName) {
 		generateElement(definition, elements, componentName, true);
+	});
+	Lazy(data.data || {}).each(function (componentData, componentName) {
+		componentData = componentData || {};
+		componentData.root = componentName;
+		generateElement(componentData, elements, null, true);
 	});
 	finalize(elements);
 	return XMLBuilder.create({ elements: elements }).toString();
 }
 
-module.exports = {
-	generateXML: generateXML,
-	generateXMLComponents: generateXMLComponents
-};
+module.exports = generateXML;
