@@ -3,6 +3,7 @@ var React = require("react");
 var Link = require("react-router").Link;
 var assign = Object.assign || require("react/lib/Object.assign.js");
 
+var ComponentMenu = require("./ComponentMenu.jsx");
 var JsonEditBox = require("./JsonEditBox.jsx");
 var Renderer = require("./Renderer.jsx");
 
@@ -25,25 +26,6 @@ var RendererBox = React.createClass({
 		var root = this.state.currentComponent;
 		var currentComponent = this.state.components[root] || {};
 		var currentData = this.state.data[root] || {};
-		var options = Object.keys(this.state.components).map(function (name) {
-			var style = {
-				marginLeft: 8,
-				padding: "2px 3px 0 3px",
-				cursor: "pointer",
-				border: "1px solid black",
-				borderBottom: "none",
-				background: name === root ? "#aaa" : "#fff",
-				width: "auto",
-				float: "left",
-				boxSizing: "border-box",
-				height: 23,
-				color: "inherit",
-				textDecoration: "inherit"
-			};
-			return (
-				<Link to="component" params={{ component: name }} style={ style } key={ name }>{ name }</Link>
-			);
-		}.bind(this));
 		var paneStyles = {
 			width: "50%",
 			height: "calc(100% - 32px)",
@@ -53,10 +35,7 @@ var RendererBox = React.createClass({
 		};
 		return (
 			<div style={ this.props.style }>
-				<div style={{ paddingTop: 8, height: 32, boxSizing: "border-box", overflow: "auto", borderBottom: "1px solid black" }}>
-					{ options }
-					<div style={{ clear: "both" }} />
-				</div>
+				<ComponentMenu components={ Object.keys(this.state.components) } current={ root } />
 				<div style={{ ...paneStyles, float: "left", width: "35%", borderRight: "1px solid black" }}>
 					<JsonEditBox data={ currentComponent }
 						onChange={ this.componentsChanged }
