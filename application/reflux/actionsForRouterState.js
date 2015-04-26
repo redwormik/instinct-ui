@@ -1,3 +1,6 @@
+var utilities = require("ambidex").addons.utilities;
+
+
 module.exports = [
 	{
 		actionName: "getComponents",

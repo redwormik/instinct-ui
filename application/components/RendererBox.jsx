@@ -8,23 +8,23 @@ var Renderer = require("./Renderer.jsx");
 
 var RendererBox = React.createClass({
 	mixins: [
-		Ambidex.mixinCreators.connectStoresToLocalState(["Components", "Data", "Root"])
+		Ambidex.mixinCreators.connectStoresToLocalState(["Components", "Data", "CurrentComponent"])
 	],
 	rootChanged: function (root) {
 		this.getRefluxAction("updateRoot")(root);
 	},
 	componentsChanged: function (components) {
 		var newComponents = assign({}, this.state.components);
-		newComponents[this.state.root] = components;
+		newComponents[this.state.currentComponent] = components;
 		this.getRefluxAction("updateComponents")(newComponents);
 	},
 	dataChanged: function (data) {
 		var newData = assign({}, this.state.data);
-		newData[this.state.root] = data;
+		newData[this.state.currentComponent] = data;
 		this.getRefluxAction("updateData")(newData);
 	},
 	render: function () {
-		var root = this.state.root;
+		var root = this.state.currentComponent;
 		var currentComponent = this.state.components[root] || {};
 		var currentData = this.state.data[root] || {};
 		var options = Object.keys(this.state.components).map(function (name) {
