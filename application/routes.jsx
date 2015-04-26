@@ -6,7 +6,7 @@ var NotFoundRoute = Router.NotFoundRoute;
 
 
 module.exports = (
-	<Route name="main" path="/" handler={ require("./components/Main.jsx") }>
+	<Route name="main" path="/" handler={ require("./components/App.jsx") }>
 		<DefaultRoute handler={ require("./components/Home.jsx") } />
 		<NotFoundRoute handler={ require("./components/NotFound.jsx") } />
 	</Route>
