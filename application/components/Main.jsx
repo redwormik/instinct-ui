@@ -3,7 +3,7 @@ var React = require("react");
 var RendererBox = require("./RendererBox.jsx");
 
 
-var Home = React.createClass({
+var Main = React.createClass({
 	render: function () {
 		return (
 			<RendererBox style={{ width: "100vw", height: "100vh" }}/>
@@ -11,4 +11,4 @@ var Home = React.createClass({
 	}
 });
 
-module.exports = Home;
+module.exports = Main;
