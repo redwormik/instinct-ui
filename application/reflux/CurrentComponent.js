@@ -1,9 +1,9 @@
 
 
 var CurrentComponent = {
-	actions: ["updateRoot"],
+	actions: ["getCurrentComponent"],
 	store: {
-		dependencies: { actions: ["getComponents"], stores: ["Components"] },
+		dependencies: { stores: ["Components"] },
 		init: function () {
 			this.state = null;
 			this.listenTo(this.parent.stores.Components, this.checkEmptyRoot);
@@ -15,8 +15,8 @@ var CurrentComponent = {
 				this.trigger(this.state);
 			}
 		},
-		onUpdateRoot: function (root) {
-			this.state = root;
+		onGetCurrentComponent: function (current) {
+			this.state = current;
 			this.trigger(this.state);
 		}
 	}

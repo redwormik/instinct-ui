@@ -9,5 +9,11 @@ module.exports = [
 	{
 		actionName: "getData",
 		storeName: "Data"
+	},
+	{
+		parameterName: "component",
+		actionName: "getCurrentComponent",
+		storeName: "CurrentComponent",
+		isReady: utilities.hasContent
 	}
 ];

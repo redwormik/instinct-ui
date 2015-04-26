@@ -1,5 +1,6 @@
 var Ambidex  = require("ambidex");
 var React = require("react");
+var Link = require("react-router").Link;
 var assign = Object.assign || require("react/lib/Object.assign.js");
 
 var JsonEditBox = require("./JsonEditBox.jsx");
@@ -10,9 +11,6 @@ var RendererBox = React.createClass({
 	mixins: [
 		Ambidex.mixinCreators.connectStoresToLocalState(["Components", "Data", "CurrentComponent"])
 	],
-	rootChanged: function (root) {
-		this.getRefluxAction("updateRoot")(root);
-	},
 	componentsChanged: function (components) {
 		var newComponents = assign({}, this.state.components);
 		newComponents[this.state.currentComponent] = components;
@@ -38,10 +36,12 @@ var RendererBox = React.createClass({
 				width: "auto",
 				float: "left",
 				boxSizing: "border-box",
-				height: 23
+				height: 23,
+				color: "inherit",
+				textDecoration: "inherit"
 			};
 			return (
-				<div style={ style } onClick={ this.rootChanged.bind(this, name) } key={ name }>{ name }</div>
+				<Link to="component" params={{ component: name }} style={ style } key={ name }>{ name }</Link>
 			);
 		}.bind(this));
 		var paneStyles = {
