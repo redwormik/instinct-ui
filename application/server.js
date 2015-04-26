@@ -70,6 +70,26 @@ function readJson(type, name) {
 }
 
 
+function newJson(conn, type) {
+	var file = jsonFile(type);
+
+	return getFromParams(conn, type, true).fold(function (data, newData) {
+		var name = "Component", suffix = "", i = 1;
+		while (data[name + suffix] !== undefined) {
+			i++;
+			suffix = "" + i;
+		}
+		name += suffix;
+		data[name] = newData;
+		return writeFile(file, JSON.stringify(data, null, "\t") + "\n").then(function () {
+			return name;
+		});
+	}, readJson(type)).then(function (name) {
+		conn.redirect(303, "/" + type + "/" + name + ".json");
+	});
+}
+
+
 function writeJson(conn, type, name) {
 	var file = jsonFile(type);
 
@@ -141,12 +161,16 @@ types.forEach(function (type) {
 	});
 
 	routes.post("/" + type + ".json", function (conn) {
+		return newJson(conn, type);
+	});
+
+	routes.put("/" + type + ".json", function (conn) {
 		return writeJson(conn, type).then(function () {
 			conn.file({ path: jsonFile(type) });
 		});
 	});
 
-	routes.post("/" + type + "/:name.json", function(conn) {
+	routes.put("/" + type + "/:name.json", function(conn) {
 		return writeJson(conn, type, conn.params.name).then(function () {
 			return readJson(type, name);
 		}).then(function (data) {
