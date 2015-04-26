@@ -16,6 +16,7 @@ if (settings.CUSTOM_SETTINGS.CORS) {
 		return function (conn) {
 			return conn.call(app).then(function () {
 				conn.response.setHeader("Access-Control-Allow-Origin", "*");
+				conn.response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
 			});
 		}
 	});
@@ -179,6 +180,10 @@ routes.get("/all.xml", function (conn) {
 
 routes.get("/:name.xml", function (conn) {
 	return readXml(types, conn.params.name);
+});
+
+app.options("*", function () {
+	return "";
 });
 
 module.exports = app;
