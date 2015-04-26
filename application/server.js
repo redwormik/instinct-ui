@@ -11,6 +11,9 @@ var writeFile = whenNode.lift(fs.writeFile);
 var readFile = whenNode.lift(fs.readFile);
 var app = mach.stack();
 
+app.use(mach.logger);
+app.use(mach.charset, "utf-8");
+
 if (settings.CUSTOM_SETTINGS.CORS) {
 	app.use(function (app) {
 		return function (conn) {
@@ -26,7 +29,7 @@ if (settings.CUSTOM_SETTINGS.CORS) {
 function BadRequestError(message, code) {
 	this.name = "BadRequestError";
 	this.message = message;
-	this.code = code || 404;
+	this.code = code || 400;
 }
 BadRequestError.prototype = Object.create(Error.prototype);
 BadRequestError.prototype.constructor = BadRequestError;
@@ -37,95 +40,106 @@ function jsonFile(type) {
 }
 
 
-function getFromParams(conn, type, singular) {
+function getParamKey(type, singular) {
+	return singular && type[type.length - 1] === "s" ?
+		type.substr(0, type.length - 1) : type;
+}
+
+
+function getFromParams(conn, types, singular, required) {
 	var paramTypes = {};
-	var key = singular && type[type.length - 1] === "s" ?
-		type.substr(0, type.length - 1) :
-		type;
-	paramTypes[key] = String;
+	types.forEach(function (type) {
+		paramTypes[getParamKey(type, singular)] = String;
+	});
+
 	return conn.getParams(paramTypes).then(function (params) {
-		if (params[key] === undefined) {
-			throw new BadRequestError("Missing parameter: " + key);
-		}
-		try {
-			return JSON.parse(params[key]);
-		} catch (error) {
-			throw new BadRequestError(error.message);
-		}
+		types.forEach(function (type) {
+			var key = getParamKey(type, singular);
+			if (required && params[key] === undefined) {
+				throw new BadRequestError("Missing parameter: " + key);
+			}
+			try {
+				params[type] = params[key] === undefined ?
+					{} : JSON.parse(params[key]);
+			} catch (error) {
+				throw new BadRequestError(error.message);
+			}
+		});
+		return params;
 	});
 }
 
 
-function readJson(type, name) {
+function getJson(type, name) {
 	var file = jsonFile(type);
 	var json = readFile(file).then(JSON.parse);
 	return name ? json.then(function (data) {
 		if (data[name] === undefined) {
-			throw new BadRequestError("Component not found");
+			throw new BadRequestError("Component not found", 404);
 		}
 		else {
-			return data[name];
+			var tmp = {};
+			tmp[name] = data[name];
+			return tmp;
 		}
 	}) : json;
 }
 
 
-function newJson(conn, type) {
-	var file = jsonFile(type);
+function writeJson(type, data) {
+	return writeFile(jsonFile(type), JSON.stringify(data, null, "\t") + "\n");
+}
 
-	return getFromParams(conn, type, true).fold(function (data, newData) {
+
+function postJson(conn, types) {
+	return when.map(types, function (type) {
+		return getJson(type);
+	}).fold(function (newData, data) {
 		var name = "Component", suffix = "", i = 1;
-		while (data[name + suffix] !== undefined) {
+		while (types.some(function (type, idx) {
+			return data[idx][name + suffix] !== undefined;
+		})) {
 			i++;
-			suffix = "" + i;
+			suffix = "_" + i;
 		}
 		name += suffix;
-		data[name] = newData;
-		return writeFile(file, JSON.stringify(data, null, "\t") + "\n").then(function () {
+		return when.map(types, function (type, idx) {
+			data[idx][name] = newData[type];
+			return writeJson(type, data[idx]);
+		}).then(function () {
 			return name;
 		});
-	}, readJson(type)).then(function (name) {
-		conn.redirect(303, "/" + type + "/" + name + ".json");
-	});
+	}, getFromParams(conn, types, true, false));
 }
 
 
-function writeJson(conn, type, name) {
-	var file = jsonFile(type);
-
-	return getFromParams(conn, type, name).then(function (data) {
-		return name ? readJson(type).then(function (oldData) {
-			oldData[name] = data;
+function putJson(conn, type, name) {
+	return getFromParams(conn, [type], !!name, true).then(function (data) {
+		return name ? getJson(type).then(function (oldData) {
+			oldData[name] = data[type];
 			return oldData;
-		}) : data;
+		}) : data[type];
 	}).then(function (data) {
-		return writeFile(file, JSON.stringify(data, null, "\t") + "\n");
+		return writeJson(type, data);
 	});
 }
 
 
-function deleteJson(type, name) {
-	var file = jsonFile(type);
-
-	return readJson(type).then(function (data) {
-		delete data[name];
-		return writeFile(file, JSON.stringify(data, null, "\t") + "\n");
+function deleteJson(types, name) {
+	return when.map(types, function (type) {
+		return getJson(type).then(function (data) {
+			delete data[name];
+			return writeJson(type, data);
+		});
 	});
 }
 
 
-function readXml(types, name) {
+function getXml(types, name) {
 	var data = {};
-
 	return when.all(types.map(function (type) {
-		return readJson(type, name).then(function (typeData) {
-			if (name) {
-				data[type] = {};
-				data[type][name] = typeData;
-			}
-			else {
-				data[type] = typeData;
-			}
+		return getJson(type, name).then(function (typeData) {
+			data[type] = typeData;
 		});
 	})).then(function () {
 		return generateXML(data);
@@ -155,24 +169,26 @@ types.forEach(function (type) {
 	});
 
 	routes.get("/" + type + "/:name.json", function(conn) {
-		return readJson(type, conn.params.name).then(function (data) {
+		return getJson(type, conn.params.name).then(function (data) {
 			conn.json(data);
 		});
 	});
 
 	routes.post("/" + type + ".json", function (conn) {
-		return newJson(conn, type);
+		return postJson(conn, types).then(function (name) {
+			conn.redirect(303, "/" + type + "/" + name + ".json");
+		});
 	});
 
 	routes.put("/" + type + ".json", function (conn) {
-		return writeJson(conn, type).then(function () {
+		return putJson(conn, type).then(function () {
 			conn.file({ path: jsonFile(type) });
 		});
 	});
 
 	routes.put("/" + type + "/:name.json", function(conn) {
-		return writeJson(conn, type, conn.params.name).then(function () {
-			return readJson(type, name);
+		return putJson(conn, type, conn.params.name).then(function () {
+			return getJson(type, conn.params.name);
 		}).then(function (data) {
 			conn.json(data);
 		});
@@ -184,26 +200,26 @@ types.forEach(function (type) {
 	});
 
 	routes.delete("/" + type + "/:name.json", function (conn) {
-		return deleteJson(type, conn.params.name).then(function () {
+		return deleteJson(types, conn.params.name).then(function () {
 			conn.file({ path: jsonFile(type) });
 		});
 	});
 
 	routes.get("/" + type + ".xml", function (conn) {
-		return readXml([type]);
+		return getXml([type]);
 	});
 
 	routes.get("/" + type + "/:name.xml", function (conn) {
-		return readXml([type], conn.params.name, conn);
+		return getXml([type], conn.params.name, conn);
 	});
 });
 
 routes.get("/all.xml", function (conn) {
-	return readXml(types);
+	return getXml(types);
 });
 
 routes.get("/:name.xml", function (conn) {
-	return readXml(types, conn.params.name);
+	return getXml(types, conn.params.name);
 });
 
 app.options("*", function () {
