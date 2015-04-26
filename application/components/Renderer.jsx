@@ -163,7 +163,11 @@ var Renderer = React.createClass({
 	render: function () {
 		var definition = assign({}, this.props.data);
 		definition.root = this.props.root;
-		return this.createElement(definition, true, {}, undefined);
+		return (
+			<div>
+				{ this.createElement(definition, true, {}, undefined) }
+			</div>
+		);
 	}
 });
 
