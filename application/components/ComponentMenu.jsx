@@ -7,6 +7,7 @@ var HoldButton = require("./HoldButton.jsx");
 
 
 var ComponentMenu = React.createClass({
+	mixins: [ Ambidex.mixins.Reflux ],
 	handleWheel: function (event) {
 		var node = this.refs.scrolling.getDOMNode();
 		node.scrollLeft += (event.deltaY * 16);
@@ -40,7 +41,7 @@ var ComponentMenu = React.createClass({
 		};
 		var buttonStyle = assign({}, clickableStyle, {
 			width: 24,
-			float: "left",
+			float: "right",
 			textAlign: "center"
 		});
 		var linkStyle = assign({}, clickableStyle, {
@@ -51,10 +52,11 @@ var ComponentMenu = React.createClass({
 			textAlign: "center"
 		});
 
-		var links = this.props.components ? this.props.components.map(function (name, index) {
+		var links = this.props.components ? this.props.components.map(function (name, index, names) {
 			var style = assign({}, linkStyle, {
 				background: name === this.props.current ? "#aaa" : "#fff",
 				marginLeft: index === 0 ? 8 : null,
+				marginRight: index === names.length - 1 ? 8 : null,
 				borderLeft: index === 0 ? border : null
 			});
 			return (
@@ -66,8 +68,12 @@ var ComponentMenu = React.createClass({
 
 		return (
 			<div style={ style }>
-				<HoldButton onHold={ this.scrollLeftHeld } style={{ ...buttonStyle, borderLeft: border }}>&#x25c0;</HoldButton>
-				<HoldButton onHold={ this.scrollRightHeld } style={ buttonStyle }>&#x25b6;</HoldButton>
+				<div onClick={ this.getRefluxAction("createComponent") }
+					style={{ ...buttonStyle, float: "left", borderLeft: border }}>+</div>
+				<HoldButton onHold={ this.scrollRightHeld }
+					style={ buttonStyle }>&#x25b6;</HoldButton>
+				<HoldButton onHold={ this.scrollLeftHeld }
+					style={{ ...buttonStyle, borderLeft: border }}>&#x25c0;</HoldButton>
 				<div onWheel={ this.handleWheel } style={{ overflow: "hidden" }} ref="scrolling">
 					<div style={{ width: "auto", whiteSpace: "nowrap" }}>
 						{ links }

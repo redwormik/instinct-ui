@@ -164,7 +164,7 @@ var Renderer = React.createClass({
 		var definition = assign({}, this.props.data);
 		definition.root = this.props.root;
 		return (
-			<div>
+			<div style={ this.props.style }>
 				{ this.createElement(definition, true, {}, undefined) }
 			</div>
 		);

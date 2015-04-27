@@ -1,27 +1,42 @@
 var Ambidex  = require("ambidex");
 var React = require("react");
 var Link = require("react-router").Link;
-var assign = Object.assign || require("react/lib/Object.assign.js");
+var Navigation = require("react-router").Navigation;
 
 var ComponentMenu = require("./ComponentMenu.jsx");
-var JsonEditBox = require("./JsonEditBox.jsx");
+var ComponentEditPanel = require("./ComponentEditPanel.jsx");
 var Renderer = require("./Renderer.jsx");
 
 
 var RendererBox = React.createClass({
 	mixins: [
-		Ambidex.mixinCreators.connectStoresToLocalState(["Components", "Data", "CurrentComponent"])
+		Ambidex.mixinCreators.connectStoresToLocalState([
+			"Components", "Data", "CurrentComponent"
+		]),
+		Navigation
 	],
-	componentsChanged: function (components) {
-		this.getRefluxAction("updateComponent")(components, this.state.currentComponent);
+	getCurrent: function () {
+		return this.state.currentComponent || Object.keys(this.state.components)[0];
 	},
-	dataChanged: function (data) {
-		this.getRefluxAction("updateData")(data, this.state.currentComponent);
+	componentDidUpdate: function (prevProps, prevState) {
+		if ((created = this.getRefluxStore("Components").created)) {
+			this.transitionTo("component", { component: created });
+			return;
+		}
+		var name = this.state.currentComponent;
+		if (!created && name !== prevState.currentComponent) {
+			if (name) {
+				this.transitionTo("component", { component: name });
+			}
+			else {
+				this.transitionTo("main");
+			}
+		}
 	},
 	render: function () {
-		var root = this.state.currentComponent;
-		var currentComponent = this.state.components[root] || {};
-		var currentData = this.state.data[root] || {};
+		var current = this.getCurrent();
+		var component = this.state.components[current];
+		var data = this.state.data[current] || {};
 		var paneStyles = {
 			width: "50%",
 			height: "calc(100% - 32px)",
@@ -31,18 +46,11 @@ var RendererBox = React.createClass({
 		};
 		return (
 			<div style={ this.props.style }>
-				<ComponentMenu components={ Object.keys(this.state.components) } current={ root } />
-				<div style={{ ...paneStyles, float: "left", width: "35%", borderRight: "1px solid black" }}>
-					<JsonEditBox data={ currentComponent }
-						onChange={ this.componentsChanged }
-						style={{ width: "100%", height: "50%" }} />
-					<JsonEditBox data={ currentData }
-						onChange={ this.dataChanged }
-						style={{ width: "100%", height: "50%" }} />
-				</div>
-				<div style={{ ...paneStyles, float: "right", width: "65%" }}>
-					<Renderer root={ root } data={ currentData } components={ this.state.components } />
-				</div>
+				<ComponentMenu components={ Object.keys(this.state.components) } current={ current } />
+				<ComponentEditPanel name={ current } component={ component } data={ data }
+					style={{ ...paneStyles, float: "left", width: "35%", borderRight: "1px solid black" }} />
+				<Renderer root={ current } data={ data } components={ this.state.components }
+					style={{ ...paneStyles, float: "right", width: "65%" }} />
 				<div style={{ clear: "both" }} />
 			</div>
 		)
