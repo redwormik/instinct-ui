@@ -13,7 +13,6 @@ module.exports = [
 	{
 		parameterName: "component",
 		actionName: "getCurrentComponent",
-		storeName: "CurrentComponent",
-		isReady: utilities.hasContent
+		storeName: "CurrentComponent"
 	}
 ];

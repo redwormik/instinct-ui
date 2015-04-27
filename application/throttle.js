@@ -2,7 +2,7 @@
 // http://benalman.com/projects/jquery-throttle-debounce-plugin/
 
 
-function throttle(fn, threshold) {
+function throttle(fn, threshold, trailing) {
 	var timer, last;
 
 	return function () {
@@ -11,12 +11,13 @@ function throttle(fn, threshold) {
 		var now = +(new Date());
 
 		if (timer) clearTimeout(timer);
-
 		if (last && (now - last < threshold)) {
-			timer = setTimeout(function () {
-				last = +(new Date());
-				fn.apply(that, args);
-			}, threshold - (now - last));
+			if (trailing) {
+				timer = setTimeout(function () {
+					last = +(new Date());
+					fn.apply(that, args);
+				}, threshold - (now - last));
+			}
 		}
 		else {
 			last = now;

@@ -13,14 +13,10 @@ var RendererBox = React.createClass({
 		Ambidex.mixinCreators.connectStoresToLocalState(["Components", "Data", "CurrentComponent"])
 	],
 	componentsChanged: function (components) {
-		var newComponents = assign({}, this.state.components);
-		newComponents[this.state.currentComponent] = components;
-		this.getRefluxAction("updateComponents")(newComponents);
+		this.getRefluxAction("updateComponent")(components, this.state.currentComponent);
 	},
 	dataChanged: function (data) {
-		var newData = assign({}, this.state.data);
-		newData[this.state.currentComponent] = data;
-		this.getRefluxAction("updateData")(newData);
+		this.getRefluxAction("updateData")(data, this.state.currentComponent);
 	},
 	render: function () {
 		var root = this.state.currentComponent;

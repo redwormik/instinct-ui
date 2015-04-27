@@ -1,23 +1,29 @@
 
 
 var CurrentComponent = {
+	dependencies: { actions: ["renameComponent", "deleteComponent"] },
 	actions: ["getCurrentComponent"],
 	store: {
-		dependencies: { stores: ["Components"] },
 		init: function () {
 			this.state = null;
-			this.listenTo(this.parent.stores.Components, this.checkEmptyRoot);
-		},
-		checkEmptyRoot: function (components) {
-			var keys = Object.keys(components);
-			if (this.state === null && keys.length > 0) {
-				this.state = keys[0];
-				this.trigger(this.state);
-			}
+			this.listenTo(this.parent.actions.renameComponent, this.onRenameComponent);
+			this.listenTo(this.parent.actions.deleteComponent, this.onDeleteComponent);
 		},
 		onGetCurrentComponent: function (current) {
 			this.state = current;
 			this.trigger(this.state);
+		},
+		onRenameComponent: function (newName, oldName) {
+			if (this.state && this.state === oldName) {
+				this.state = newName;
+				this.trigger(this.state);
+			}
+		},
+		onDeleteComponent: function (name) {
+			if (this.state && this.state === name) {
+				this.state = null;
+				this.trigger(this.state);
+			}
 		}
 	}
 }
