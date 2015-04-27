@@ -97,7 +97,7 @@ var Renderer = React.createClass({
 		}
 
 		// TODO: check type value
-		if (!type || type === null || typeof type === "object" || /^\$/.exec(type)) {
+		if (!type || type === null || typeof type === "object" || !/^[A-Za-z]/.exec(type)) {
 			var typeString = (typeof type === "string" ?  "\"" + type + "\"" : type);
 			throw new Error("Invalid root " + typeString);
 		}
@@ -161,6 +161,13 @@ var Renderer = React.createClass({
 		});
 	},
 	render: function () {
+		if (!this.props.root) {
+			return (
+				<div style={ this.props.style }>
+					<ErrorMessage message="No component selected" />
+				</div>
+			);
+		}
 		var definition = assign({}, this.props.data);
 		definition.root = this.props.root;
 		return (
