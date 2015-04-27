@@ -176,7 +176,7 @@ types.forEach(function (type) {
 
 	routes.post("/" + type + ".json", function (conn) {
 		return postJson(conn, types).then(function (name) {
-			conn.redirect(303, "/" + type + "/" + name + ".json");
+			conn.redirect(303, type + "/" + name + ".json");
 		});
 	});
 
