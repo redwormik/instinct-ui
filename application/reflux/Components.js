@@ -1,4 +1,3 @@
-var throttle = require("../throttle.js");
 
 
 var Components = {
@@ -6,34 +5,30 @@ var Components = {
 	store: {
 		mixins: [
 			require("./mixins/apiCalls.js"),
+			require("./mixins/updateCount.js"),
+			require("./mixins/loadSendData.js"),
 			require("./mixins/rename.js")
 		],
 		apiName: "components",
 		init: function () {
 			this.state = {};
-			this.loadDataImmediate = this.loadData;
-			this.loadData = throttle(this.loadData, 60000, false);
-			this.sendData = throttle(this.sendData, 1000, true);
+			this.created = null;
 			this.parent.actions.renameComponent.shouldEmit = this.shouldRenameComponent;
 		},
 		onGetComponents: function () {
 			this.created = null;
-			if (!(Object.keys(this.state).length > 0)) {
-				this.loadDataImmediate();
-			}
-			else {
-				this.loadData();
-			}
+			this.loadData();
 		},
 		onCreateComponent: function () {
-			this.apiPost({ component: {} }).then(function (data) {
+			this.apiPost({ component: {root: "div", style: {}} }).then(function (data) {
 				Object.keys(data).forEach(function (name) {
 					this.state[name] = data[name];
 					this.created = name;
 				}.bind(this));
 				this.trigger(this.state);
 				// TODO: update Data?
-			}.bind(this));
+			}.bind(this))
+			.done();
 		},
 		onUpdateComponent: function (component, name) {
 			this.sendData({ component: component }, name);
@@ -53,18 +48,14 @@ var Components = {
 			this.trigger(this.state);
 		},
 		onDeleteComponent: function (name) {
-			this.apiDelete(name);
+			this.updateStart();
+			var dataStore = this.parent.stores.Data;
+			this.apiDelete(name)
+				.finally(this.updateFinish)
+				.finally(dataStore.updateFinish)
+				.done();
 			delete this.state[name];
 			this.trigger(this.state);
-		},
-		loadData: function () {
-			return this.apiGet().then(function (data) {
-				this.state = data;
-				this.trigger(this.state);
-			}.bind(this));
-		},
-		sendData: function (data, name) {
-			return this.apiPut(data, name);
 		}
 	}
 }

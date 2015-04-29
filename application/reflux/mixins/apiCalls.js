@@ -1,4 +1,5 @@
 var mach = require("mach");
+var when = require("when");
 
 
 function apiRequest(that, method, data, name) {
@@ -11,7 +12,9 @@ function apiRequest(that, method, data, name) {
 			return memo;
 		}, {});
 	}
-	return mach[method](options).then(function (conn) {
+
+	// using when, because mach provides only part of when API
+	return when(mach[method](options)).then(function (conn) {
 		return JSON.parse(conn.responseText);
 	}).catch(function (e) {
 		var error = method.toUpperCase() + " " + url + " error: " + e.message;
