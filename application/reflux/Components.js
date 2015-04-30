@@ -20,7 +20,10 @@ var Components = {
 			this.loadData();
 		},
 		onCreateComponent: function () {
-			this.apiPost({ component: {root: "div", style: {}} }).then(function (data) {
+			this.apiPost({
+				component: { root: "div", style: {}, children: "" },
+				data: { property: "value" }
+			}).then(function (data) {
 				Object.keys(data).forEach(function (name) {
 					this.state[name] = data[name];
 					this.created = name;
