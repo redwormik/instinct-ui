@@ -1,13 +1,13 @@
 var Ambidex  = require("ambidex");
 var React = require("react");
 
+var Input = require("./Input.jsx");
 var JsonEditBox = require("./JsonEditBox.jsx");
 
 
 var ComponentEditPanel = React.createClass({
 	mixins: [ Ambidex.mixins.Reflux ],
-	handleNameChange: function () {
-		var newName = this.refs.name.getDOMNode().value;
+	nameChanged: function (newName) {
 		this.getRefluxAction("renameComponent")(newName, this.props.name);
 	},
 	handleDeleteClick: function () {
@@ -24,7 +24,7 @@ var ComponentEditPanel = React.createClass({
 		this.getRefluxAction("updateData")(data, this.props.name);
 	},
 	render: function() {
-		if (!this.props.component) {
+		if (!this.props.component === undefined) {
 			return <div style={ this.props.style } />;
 		}
 
@@ -47,8 +47,7 @@ var ComponentEditPanel = React.createClass({
 
 		return (
 			<div style={ this.props.style }>
-				<input value={ this.props.name } onChange={ this.handleNameChange }
-					ref="name" style={ inputStyle } />
+				<Input value={ this.props.name } onChange={ this.nameChanged } style={ inputStyle } />
 				<span onClick={ this.handleDeleteClick } style={ deleteStyle }>&times;</span>
 
 				<JsonEditBox data={ this.props.component }

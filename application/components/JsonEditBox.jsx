@@ -19,7 +19,7 @@ var JsonEditBox = React.createClass({
 				this.setState({ textToBe: this.dump(nextProps.data) });
 			}
 			else {
-				this.setState({ text: this.dump(nextProps.data), textToBe: null });
+				this.setState({ text: this.dump(nextProps.data), error: null, textToBe: null });
 			}
 		}
 	},
@@ -54,7 +54,7 @@ var JsonEditBox = React.createClass({
 	},
 	handleBlur: function() {
 		if (this.state.textToBe) {
-			this.setState({ text: this.state.textToBe, textToBe: null, focused: false });
+			this.setState({ text: this.state.textToBe, error: null, textToBe: null, focused: false });
 		}
 		else {
 			this.setState({ focused: false });
