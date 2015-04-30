@@ -36,6 +36,25 @@ var JsonEditBox = React.createClass({
 		}.bind(this));
 		return values;
 	},
+	handleKeyDown: function (e) {
+		if (e.keyCode === 9) { // tab key
+			var textNode = this.refs.text.getDOMNode();
+			// http://jsfiddle.net/2wAzx/13/
+			// get caret position/selection
+			var val = textNode.value,
+				start = textNode.selectionStart,
+				end = textNode.selectionEnd;
+
+			// set textarea value to: text before caret + tab + text after caret
+			textNode.value = val.substring(0, start) + '\t' + val.substring(end);
+
+			// put caret at right position again
+			textNode.selectionStart = textNode.selectionEnd = start + 1;
+
+			// prevent the focus lose
+			e.preventDefault();
+		}
+	},
 	handleChange: function () {
 		var text = this.refs.text.getDOMNode().value;
 		try {
@@ -70,7 +89,8 @@ var JsonEditBox = React.createClass({
 			<div style={ this.props.style }>
 				<ErrorMessage style={ errorStyle } message={ this.state.error } />
 				<textarea ref="text" value={ this.state.text } autoComplete="off"
-					onChange={ this.handleChange } onFocus={ this.handleFocus } onBlur={ this.handleBlur }
+					onKeyDown={ this.handleKeyDown } onChange={ this.handleChange }
+					onFocus={ this.handleFocus } onBlur={ this.handleBlur }
 					style={{ width: "100%", height: "calc(100% - 30px)", boxSizing: "border-box" }} />
 			</div>
 		);
