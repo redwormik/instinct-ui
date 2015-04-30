@@ -21,8 +21,7 @@ var Components = {
 		},
 		onCreateComponent: function () {
 			this.apiPost({
-				component: { root: "div", style: {}, children: "" },
-				data: { property: "value" }
+				component: { root: "div", style: {}, children: "" }
 			}).then(function (data) {
 				Object.keys(data).forEach(function (name) {
 					this.state[name] = data[name];
