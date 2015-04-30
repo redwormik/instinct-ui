@@ -24,7 +24,7 @@ var ComponentEditPanel = React.createClass({
 		this.getRefluxAction("updateData")(data, this.props.name);
 	},
 	render: function() {
-		if (!this.props.component === undefined) {
+		if (this.props.component === undefined) {
 			return <div style={ this.props.style } />;
 		}
 
