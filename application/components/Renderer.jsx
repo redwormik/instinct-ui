@@ -91,7 +91,7 @@ var Renderer = React.createClass({
 	},
 	getType: function (definition) {
 		if (definition === null || typeof definition !== "object") {
-			throw new Error("Root element must be object")
+			throw new Error("Root element must be an object")
 		}
 
 		if (Array.isArray(definition)) {
@@ -101,7 +101,7 @@ var Renderer = React.createClass({
 		var type = definition.root;
 
 		if (type === undefined) {
-			throw new Error("Missing root attribute");
+			throw new Error("Missing root property");
 		}
 
 		// TODO: check type value
@@ -139,6 +139,10 @@ var Renderer = React.createClass({
 			.omit(["root", "children"])
 			.defaults({ key: index })
 			.toObject();
+
+		if (props.style !== undefined && typeof props.style !== "object") {
+			return <ErrorMessage message="Style property must be an object" key={ index } />;
+		}
 
 		var isComponent = typeof type === "function"
 
