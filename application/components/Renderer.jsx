@@ -171,8 +171,16 @@ var Renderer = React.createClass({
 				</div>
 			);
 		}
-		var definition = assign({}, this.props.data);
-		definition.root = this.props.root;
+		var root = this.props.root;
+		if (!/^[A-Z]/.exec(root)) {
+			var rootString = (typeof root === "string" ?  "\"" + root + "\"" : root);
+			return (
+				<div style={ this.props.style }>
+					<ErrorMessage message={ "Invalid root " + rootString } />
+				</div>
+			);
+		}
+		var definition = assign({}, this.props.data, {root: root});
 		return (
 			<div style={ this.props.style }>
 				{ this.createElement(definition, true, {}, undefined) }
