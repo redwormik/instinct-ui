@@ -1,7 +1,9 @@
 var React = require("react");
+var PureRenderMixin = require("react/addons").addons.PureRenderMixin;
 
 
 var HoldButton = React.createClass({
+	mixins: [ PureRenderMixin ],
 	getDefaultProps: function () {
 		return { delay: 10 };
 	},

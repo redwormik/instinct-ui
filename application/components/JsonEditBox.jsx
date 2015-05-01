@@ -1,10 +1,12 @@
 var React = require("react");
+var PureRenderMixin = require("react/addons").addons.PureRenderMixin;
 var neon = require("neon-js");
 
 var ErrorMessage = require("./ErrorMessage.jsx");
 
 
 var JsonEditBox = React.createClass({
+	mixins: [ PureRenderMixin ],
 	getInitialState: function () {
 		return {
 			text: this.dump(this.props.data),

@@ -1,5 +1,6 @@
 var Ambidex  = require("ambidex");
 var React = require("react");
+var PureRenderMixin = require("react/addons").addons.PureRenderMixin;
 var Link = require("react-router").Link;
 var Navigation = require("react-router").Navigation;
 
@@ -10,6 +11,7 @@ var Renderer = require("./Renderer.jsx");
 
 var Main = React.createClass({
 	mixins: [
+		PureRenderMixin,
 		Ambidex.mixinCreators.connectStoresToLocalState([
 			"Components", "Data", "CurrentComponent"
 		]),

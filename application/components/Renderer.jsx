@@ -1,4 +1,5 @@
 var React = require("react");
+var PureRenderMixin = require("react/addons").addons.PureRenderMixin;
 var Lazy = require("lazy.js");
 var assign = Object.assign || require("react/lib/Object.assign.js");
 
@@ -6,6 +7,7 @@ var ErrorMessage = require("./ErrorMessage.jsx");
 
 
 var Renderer = React.createClass({
+	mixins: [ PureRenderMixin ],
 	getInitialState: function () {
 		return {
 			components: Lazy(this.props.components).map(function (definition, key) {
@@ -19,6 +21,9 @@ var Renderer = React.createClass({
 		}
 		this.setState({
 			components: Lazy(newProps.components).map(function (definition, key) {
+				if (this.props.components[key] === definition) {
+					return [key, this.state.components[key]];
+				}
 				return [key, this.createComponent(definition, key)];
 			}.bind(this)).toObject()
 		});
@@ -158,6 +163,7 @@ var Renderer = React.createClass({
 		var self = this;
 		return React.createClass({
 			displayName: name,
+			mixins: [ PureRenderMixin ],
 			render: function () {
 				return self.createElement(definition, true, this.props, undefined);
 			}

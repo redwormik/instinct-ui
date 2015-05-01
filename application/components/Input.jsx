@@ -1,7 +1,9 @@
 var React = require("react");
+var PureRenderMixin = require("react/addons").addons.PureRenderMixin;
 
 
 var Input = React.createClass({
+	mixins: [ PureRenderMixin ],
 	getInitialState: function () {
 		return { value: this.props.value };
 	},

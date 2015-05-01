@@ -1,10 +1,12 @@
 var React = require("react");
+var PureRenderMixin = require("react/addons").addons.PureRenderMixin;
 var Link = require("react-router").Link;
 
 var ErrorMessage = require("./ErrorMessage.jsx");
 
 
 var NotFound = React.createClass({
+	mixins: [ PureRenderMixin ],
 	render: function () {
 		return (
 			<div style={{ margin: 8 }}>

@@ -1,5 +1,6 @@
 var Ambidex  = require("ambidex");
 var React = require("react");
+var PureRenderMixin = require("react/addons").addons.PureRenderMixin;
 var Link = require("react-router").Link;
 var assign = Object.assign || require("react/lib/Object.assign.js");
 
@@ -7,7 +8,7 @@ var HoldButton = require("./HoldButton.jsx");
 
 
 var ComponentMenu = React.createClass({
-	mixins: [ Ambidex.mixins.Reflux ],
+	mixins: [ PureRenderMixin, Ambidex.mixins.Reflux ],
 	handleWheel: function (event) {
 		var node = this.refs.scrolling.getDOMNode();
 		node.scrollLeft += (event.deltaY * 16);

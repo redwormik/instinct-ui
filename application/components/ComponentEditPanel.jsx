@@ -1,12 +1,13 @@
 var Ambidex  = require("ambidex");
 var React = require("react");
+var PureRenderMixin = require("react/addons").addons.PureRenderMixin;
 
 var Input = require("./Input.jsx");
 var JsonEditBox = require("./JsonEditBox.jsx");
 
 
 var ComponentEditPanel = React.createClass({
-	mixins: [ Ambidex.mixins.Reflux ],
+	mixins: [ PureRenderMixin, Ambidex.mixins.Reflux ],
 	nameChanged: function (newName) {
 		this.getRefluxAction("renameComponent")(newName, this.props.name);
 	},
