@@ -1,137 +1,149 @@
 {
-	"Everything": {
-		"root": "div",
-		"children": {
+	"Homepage": {
+		"root": "Layout",
+		"items": {
 			"root": "$val",
-			"val": "children"
-		}
-	},
-	"Table": {
-		"root": "table",
-		"style": {
-			"border": "3px solid black"
+			"val": "items"
 		},
-		"children": [
-			{
-				"root": "caption",
-				"children": {
-					"root": "$val",
-					"val": "caption"
-				}
-			},
-			{
-				"root": "$for",
-				"for": "index",
-				"in": {
-					"root": "$val",
-					"val": "data"
-				},
-				"do": {
-					"root": "TableRow",
-					"data": {
-						"root": "$index",
-						"index": {
-							"root": "$val",
-							"val": "index"
-						},
-						"in": {
-							"root": "$val",
-							"val": "data"
-						}
-					}
-				}
-			}
-		]
-	},
-	"TableRow": {
-		"root": "tr",
-		"style": {
-			"background": "#999"
+		"total": {
+			"root": "$val",
+			"val": "total"
+		},
+		"categories": {
+			"root": "$val",
+			"val": "categories"
 		},
 		"children": {
-			"root": "$for",
-			"for": "index",
-			"in": {
+			"root": "ProductList",
+			"products": {
 				"root": "$val",
-				"val": "data"
-			},
-			"do": {
-				"root": "TableCell",
-				"children": {
-					"root": "$index",
-					"index": {
-						"root": "$val",
-						"val": "index"
-					},
-					"in": {
-						"root": "$val",
-						"val": "data"
-					}
-				}
+				"val": "products"
 			}
 		}
 	},
-	"TableCell": {
-		"root": "td",
-		"style": {
-			"border": "1px solid black"
+	"ProductPage": {
+		"root": "Layout",
+		"items": {
+			"root": "$val",
+			"val": "items"
+		},
+		"total": {
+			"root": "$val",
+			"val": "total"
+		},
+		"categories": {
+			"root": "$val",
+			"val": "categories"
 		},
 		"children": {
-			"root": "$val",
-			"val": "children"
+			"root": "ProductDetail",
+			"product": {
+				"root": "$val",
+				"val": "product"
+			}
 		}
 	},
-	"Box": {
+	"CartPage": {
+		"root": "Layout",
+		"items": {
+			"root": "$val",
+			"val": "items"
+		},
+		"total": {
+			"root": "$val",
+			"val": "total"
+		},
+		"categories": {
+			"root": "$val",
+			"val": "categories"
+		},
+		"children": {
+			"root": "CartDetail",
+			"data": {
+				"root": "$val",
+				"val": "cartData"
+			},
+			"items": {
+				"root": "$val",
+				"val": "items"
+			},
+			"total": {
+				"root": "$val",
+				"val": "total"
+			}
+		}
+	},
+	"Layout": {
 		"root": "div",
 		"style": {
-			"root": "$merge",
-			"merge": [
-				{
-					"root": "$val",
-					"val": "style"
-				},
-				{
-					"border": "3px solid black",
-					"float": "left",
-					"padding": "5",
-					"margin": "5"
-				}
-			]
+			"height": "100vh",
+			"background": "#eef",
+			"margin": -8,
+			"fontFamily": "sans-serif"
 		},
 		"children": [
 			{
 				"root": "div",
-				"children": {
-					"root": "$val",
-					"val": "name"
-				}
-			},
-			{
-				"root": "$val",
-				"val": "children"
-			}
-		]
-	},
-	"Boxes": {
-		"root": "div",
-		"children": [
-			{
-				"root": "Box",
-				"name": "My Box",
 				"children": [
 					{
-						"root": "Box",
-						"name": "My Inner Box",
+						"root": "div",
+						"style": {
+							"width": 200,
+							"float": "right"
+						},
 						"children": {
-							"root": "Box",
-							"name": "My Inner Inner Box"
+							"root": "CartInfo",
+							"items": {
+								"root": "$val",
+								"val": "items"
+							},
+							"total": {
+								"root": "$val",
+								"val": "total"
+							}
 						}
 					},
 					{
-						"root": "Box",
-						"name": "My Second Inner Box"
+						"root": "Header"
 					}
 				]
+			},
+			{
+				"root": "div",
+				"style": {
+					"borderBottom": "1px solid black",
+					"background": "red",
+					"clear": "both"
+				}
+			},
+			{
+				"root": "div",
+				"style": {
+					"width": 200,
+					"height": "calc(100% - 82px)",
+					"borderRight": "1px solid black",
+					"marginRight": 8,
+					"float": "left"
+				},
+				"children": {
+					"root": "CategoryList",
+					"data": {
+						"root": "$val",
+						"val": "categories"
+					}
+				}
+			},
+			{
+				"root": "div",
+				"style": {
+					"margin": "8px",
+					"height": "calc(100% - 98px)",
+					"overflow": "auto"
+				},
+				"children": {
+					"root": "$val",
+					"val": "children"
+				}
 			},
 			{
 				"root": "div",
@@ -141,98 +153,545 @@
 			}
 		]
 	},
-	"Boxes2": {
-		"root": "Box",
-		"name": "NOT NAME",
-		"children": [
-			{
-				"root": "Box",
-				"name": {
-					"root": "$val",
-					"val": "name"
-				}
-			}
-		]
-	},
-	"Figure": {
-		"root": "div",
-		"children": [
-			{
-				"root": "$val",
-				"val": "title"
-			},
-			{
-				"root": "br"
-			},
-			{
-				"root": "img",
-				"src": {
-					"root": "$val",
-					"val": "src"
-				},
-				"alt": {
-					"root": "$val",
-					"val": "title"
-				},
-				"title": {
-					"root": "$val",
-					"val": "title"
-				}
-			}
-		]
-	},
-	"Container": {
+	"Header": {
 		"root": "div",
 		"style": {
-			"width": "100%",
-			"height": "600",
-			"position": "relative"
+			"background": "#ffe",
+			"padding": 8
 		},
 		"children": {
-			"root": "$val",
-			"val": "children"
+			"root": "h1",
+			"children": "Instinct e-shop"
 		}
 	},
-	"RList": {
-		"root": "$if",
-		"if": {
+	"CartInfo": {
+		"root": "div",
+		"style": {},
+		"children": [
+			{
+				"root": "h3",
+				"style": {
+					"margin": 0
+				},
+				"children": {
+					"root": "a",
+					"href": "/cart",
+					"children": "Shopping cart"
+				}
+			},
+			{
+				"root": "table",
+				"children": [
+					{
+						"root": "tr",
+						"children": [
+							{
+								"root": "td",
+								"style": {
+									"textAlign": "right"
+								},
+								"children": {
+									"root": "$val",
+									"val": "items"
+								}
+							},
+							{
+								"root": "td",
+								"children": "items"
+							}
+						]
+					},
+					{
+						"root": "tr",
+						"children": [
+							{
+								"root": "td",
+								"style": {
+									"textAlign": "right"
+								},
+								"children": [
+									"$",
+									{
+										"root": "$val",
+										"val": "total"
+									}
+								]
+							},
+							{
+								"root": "td",
+								"children": "total"
+							}
+						]
+					}
+				]
+			},
+			{
+				"root": "a",
+				"href": "/cart",
+				"children": "Go to the cart"
+			}
+		]
+	},
+	"CategoryList": {
+		"root": "ul",
+		"children": {
 			"root": "$for",
+			"for": "i",
 			"in": {
 				"root": "$val",
 				"val": "data"
+			},
+			"do": {
+				"root": "CategoryListItem",
+				"item": {
+					"root": "$index",
+					"index": {
+						"root": "$val",
+						"val": "i"
+					},
+					"in": {
+						"root": "$val",
+						"val": "data"
+					}
+				}
 			}
-		},
-		"then": {
-			"root": "ul",
-			"children": {
-				"root": "$for",
-				"for": "i",
-				"in": {
-					"root": "$val",
-					"val": "data"
+		}
+	},
+	"CategoryListItem": {
+		"root": "li",
+		"children": [
+			{
+				"root": "a",
+				"href": {
+					"root": "$index",
+					"index": "link",
+					"in": {
+						"root": "$val",
+						"val": "item"
+					}
 				},
-				"do": {
-					"root": "RList",
+				"children": {
+					"root": "$index",
+					"index": "name",
+					"in": {
+						"root": "$val",
+						"val": "item"
+					}
+				}
+			},
+			{
+				"root": "$if",
+				"if": {
+					"root": "$index",
+					"index": "children",
+					"in": {
+						"root": "$val",
+						"val": "item"
+					}
+				},
+				"then": {
+					"root": "CategoryList",
 					"data": {
 						"root": "$index",
-						"index": {
-							"root": "$val",
-							"val": "i"
-						},
+						"index": "children",
 						"in": {
 							"root": "$val",
-							"val": "data"
+							"val": "item"
 						}
 					}
 				}
 			}
-		},
-		"else": {
-			"root": "li",
-			"children": {
-				"root": "$val",
-				"val": "data"
+		]
+	},
+	"ProductList": {
+		"root": "div",
+		"children": [
+			{
+				"root": "h2",
+				"children": "Category 1"
+			},
+			{
+				"root": "div",
+				"style": {
+					"display": "flex",
+					"flexWrap": "wrap",
+					"justifyContent": "space-around"
+				},
+				"children": {
+					"root": "$for",
+					"for": "i",
+					"in": {
+						"root": "$val",
+						"val": "products"
+					},
+					"do": {
+						"root": "ProductBox",
+						"product": {
+							"root": "$index",
+							"index": {
+								"root": "$val",
+								"val": "i"
+							},
+							"in": {
+								"root": "$val",
+								"val": "products"
+							}
+						}
+					}
+				}
 			}
-		}
+		]
+	},
+	"ProductBox": {
+		"root": "div",
+		"style": {
+			"width": 200,
+			"float": "left",
+			"border": "1px solid black",
+			"height": 250,
+			"margin": 5,
+			"padding": 5,
+			"textAlign": "center"
+		},
+		"children": [
+			{
+				"root": "h3",
+				"style": {
+					"margin": "0 0 10px 0"
+				},
+				"children": {
+					"root": "a",
+					"href": {
+						"root": "$index",
+						"index": "link",
+						"in": {
+							"root": "$val",
+							"val": "product"
+						}
+					},
+					"children": {
+						"root": "$index",
+						"index": "name",
+						"in": {
+							"root": "$val",
+							"val": "product"
+						}
+					}
+				}
+			},
+			{
+				"root": "img",
+				"src": {
+					"root": "$index",
+					"index": "image",
+					"in": {
+						"root": "$val",
+						"val": "product"
+					}
+				},
+				"alt": {
+					"root": "$index",
+					"index": "name",
+					"in": {
+						"root": "$val",
+						"val": "product"
+					}
+				},
+				"title": {
+					"root": "$index",
+					"index": "name",
+					"in": {
+						"root": "$val",
+						"val": "product"
+					}
+				}
+			},
+			{
+				"root": "div",
+				"children": {
+					"root": "a",
+					"href": {
+						"root": "$index",
+						"index": "link",
+						"in": {
+							"root": "$val",
+							"val": "product"
+						}
+					},
+					"children": "Product detail"
+				}
+			},
+			{
+				"root": "AddToCartButton"
+			}
+		]
+	},
+	"AddToCartButton": {
+		"root": "div",
+		"style": {},
+		"children": [
+			{
+				"root": "input",
+				"size": 3,
+				"defaultValue": "1",
+				"style": {
+					"textAlign": "right"
+				}
+			},
+			{
+				"root": "input",
+				"type": "image",
+				"title": "Add to cart",
+				"alt": "Add to cart",
+				"src": "http://wormik.net/cart-76-24.png"
+			}
+		]
+	},
+	"ProductDetail": {
+		"root": "div",
+		"children": [
+			{
+				"root": "div",
+				"style": {
+					"float": "right"
+				},
+				"children": [
+					{
+						"root": "img",
+						"src": {
+							"root": "$index",
+							"index": "image",
+							"in": {
+								"root": "$val",
+								"val": "product"
+							}
+						}
+					},
+					{
+						"root": "AddToCartButton"
+					}
+				]
+			},
+			{
+				"root": "h2",
+				"children": {
+					"root": "$index",
+					"index": "name",
+					"in": {
+						"root": "$val",
+						"val": "product"
+					}
+				}
+			},
+			{
+				"root": "$for",
+				"for": "i",
+				"in": {
+					"root": "$index",
+					"index": "description",
+					"in": {
+						"root": "$val",
+						"val": "product"
+					}
+				},
+				"do": [
+					{
+						"root": "p",
+						"children": {
+							"root": "$index",
+							"index": {
+								"root": "$val",
+								"val": "i"
+							},
+							"in": {
+								"root": "$index",
+								"index": "description",
+								"in": {
+									"root": "$val",
+									"val": "product"
+								}
+							}
+						}
+					}
+				]
+			}
+		]
+	},
+	"CartDetail": {
+		"root": "div",
+		"style": {},
+		"children": [
+			{
+				"root": "h2",
+				"children": "Cart Detail"
+			},
+			{
+				"root": "table",
+				"style": {
+					"width": "100%"
+				},
+				"children": {
+					"root": "tbody",
+					"children": [
+						{
+							"root": "$for",
+							"for": "i",
+							"in": {
+								"root": "$val",
+								"val": "data"
+							},
+							"do": {
+								"root": "CartRow",
+								"item": {
+									"root": "$index",
+									"index": {
+										"root": "$val",
+										"val": "i"
+									},
+									"in": {
+										"root": "$val",
+										"val": "data"
+									}
+								}
+							}
+						},
+						{
+							"root": "tr",
+							"children": [
+								{
+									"root": "td"
+								},
+								{
+									"root": "th",
+									"children": [
+										{
+											"root": "$val",
+											"val": "items"
+										},
+										" items"
+									]
+								},
+								{
+									"root": "td"
+								},
+								{
+									"root": "th",
+									"children": [
+										"$",
+										{
+											"root": "$val",
+											"val": "total"
+										},
+										" total"
+									]
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"root": "div",
+				"style": {
+					"textAlign": "center",
+					"padding": 20,
+					"fontWeight": "bold"
+				},
+				"children": {
+					"root": "a",
+					"href": "/order",
+					"children": "Proceed to order"
+				}
+			}
+		]
+	},
+	"CartRow": {
+		"root": "tr",
+		"style": {},
+		"children": [
+			{
+				"root": "td",
+				"children": {
+					"root": "a",
+					"href": {
+						"root": "$index",
+						"index": "link",
+						"in": {
+							"root": "$val",
+							"val": "item"
+						}
+					},
+					"children": {
+						"root": "$index",
+						"index": "name",
+						"in": {
+							"root": "$val",
+							"val": "item"
+						}
+					}
+				}
+			},
+			{
+				"root": "td",
+				"children": {
+					"root": "input",
+					"size": 3,
+					"defaultValue": {
+						"root": "$index",
+						"index": "qty",
+						"in": {
+							"root": "$val",
+							"val": "item"
+						}
+					},
+					"style": {
+						"textAlign": "right"
+					}
+				}
+			},
+			{
+				"root": "td",
+				"children": [
+					" × $",
+					{
+						"root": "$index",
+						"index": "cost",
+						"in": {
+							"root": "$val",
+							"val": "item"
+						}
+					}
+				]
+			},
+			{
+				"root": "td",
+				"children": [
+					"= $",
+					{
+						"root": "$index",
+						"index": "costTotal",
+						"in": {
+							"root": "$val",
+							"val": "item"
+						}
+					}
+				]
+			},
+			{
+				"root": "td",
+				"children": {
+					"root": "a",
+					"href": {
+						"root": "$index",
+						"index": "removeLink",
+						"in": {
+							"root": "$val",
+							"val": "item"
+						}
+					},
+					"children": "Remove"
+				}
+			}
+		]
 	}
 }

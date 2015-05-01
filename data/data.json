@@ -1,214 +1,409 @@
 {
-	"Everything": {
-		"children": [
+	"Homepage": {
+		"products": [
 			{
-				"root": "h1",
-				"style": {
-					"color": "blue"
-				},
-				"title": "test",
-				"children": "Instinct UI"
+				"name": "Product 1",
+				"link": "/product/1",
+				"image": "http://placekitten.com/g/200/150"
 			},
 			{
-				"root": "Table",
-				"caption": "This is a table",
-				"data": [
-					[
-						"cell",
-						"second",
-						"last"
-					],
-					[
-						"not a cell",
-						"not second",
-						"last"
-					],
-					[
-						"not a cell",
-						"second",
-						"not last"
-					]
-				]
+				"name": "Product 2",
+				"link": "/product/1",
+				"image": "http://placekitten.com/g/200/150"
 			},
 			{
-				"root": "div",
-				"children": "test"
+				"name": "Product 3",
+				"link": "/product/1",
+				"image": "http://placekitten.com/g/200/150"
 			},
 			{
-				"root": "br"
+				"name": "Product 4",
+				"link": "/product/1",
+				"image": "http://placekitten.com/g/200/150"
 			},
 			{
-				"root": "a",
-				"href": "http://seznam.cz",
-				"target": "_blank",
-				"children": "link"
+				"name": "Product 5",
+				"link": "/product/1",
+				"image": "http://placekitten.com/g/200/150"
 			},
 			{
-				"root": "div",
-				"children": "bar"
-			},
+				"name": "Product 6",
+				"link": "/product/1",
+				"image": "http://placekitten.com/g/200/150"
+			}
+		],
+		"items": 4,
+		"total": 42.1,
+		"categories": [
 			{
-				"root": "table",
+				"name": "Category",
+				"link": "/category/1",
 				"children": [
 					{
-						"root": "tr",
-						"children": [
-							{
-								"root": "th",
-								"children": "foo"
-							},
-							{
-								"root": "th",
-								"children": "bar"
-							}
-						]
+						"name": "Category 2",
+						"link": "/category/2"
 					},
 					{
-						"root": "tr",
-						"children": [
-							{
-								"root": "td",
-								"children": "bar"
-							},
-							{
-								"root": "td",
-								"children": "foo"
-							}
-						]
+						"name": "Category 3",
+						"link": "/category/3"
 					}
 				]
 			},
-			"foo",
-			"bar",
 			{
-				"root": "Boxes"
-			},
-			{
-				"root": "Figure",
-				"src": "https://placekitten.com/g/200/300",
-				"title": "THE CAT"
-			},
-			{
-				"root": "RList",
-				"data": [
-					1,
-					2,
-					[
-						"foo",
-						"bar"
-					],
-					[
-						3,
-						[
-							4,
-							[
-								5
-							]
-						]
-					]
-				]
-			},
-			{
-				"root": "Container",
+				"name": "Category 4",
+				"link": "/category/4",
 				"children": [
 					{
-						"root": "Box",
-						"name": "THIS IS A BOX",
-						"style": {
-							"position": "absolute",
-							"top": "200",
-							"left": "300"
-						}
+						"name": "Category 5",
+						"link": "/category/5"
+					},
+					{
+						"name": "Category 6",
+						"link": "/category/6"
 					}
 				]
-			}
-		]
-	},
-	"TableCell": {
-		"children": "cell"
-	},
-	"RList": {
-		"data": [
-			1,
-			2,
-			[
-				"foo",
-				"bar"
-			],
-			[
-				3,
-				[
-					4,
-					[
-						5
-					]
-				]
-			]
-		]
-	},
-	"Table": {
-		"caption": "This is a table",
-		"data": [
-			[
-				"cell",
-				"second",
-				"last"
-			],
-			[
-				"not a cell",
-				"not second",
-				"last"
-			],
-			[
-				"not a cell",
-				"second",
-				"not last"
-			]
-		]
-	},
-	"TableRow": {
-		"data": [
-			"cell",
-			"second",
-			"last"
-		]
-	},
-	"Box": {
-		"name": "My Box",
-		"children": [
-			{
-				"root": "Box",
-				"name": "My Inner Box",
-				"children": {
-					"root": "Box",
-					"name": "My Inner Inner Box"
-				}
 			},
 			{
-				"root": "Box",
-				"name": "My Second Inner Box"
-			}
-		]
-	},
-	"Boxes2": {
-		"name": "This is a name"
-	},
-	"Figure": {
-		"src": "https://placekitten.com/g/200/300",
-		"title": "THE CAT"
-	},
-	"Container": {
-		"children": [
+				"name": "Category 7",
+				"link": "/category/7"
+			},
 			{
-				"root": "Box",
-				"name": "THIS IS A BOX",
-				"style": {
-					"position": "absolute",
-					"top": "200",
-					"left": "300"
-				}
+				"name": "Category 8",
+				"link": "/category/8"
 			}
 		]
 	},
-	"Boxes": {}
+	"ProductPage": {
+		"product": {
+			"name": "Product name",
+			"description": [
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus malesuada maximus metus non volutpat. Etiam tincidunt auctor sapien, ornare rhoncus nibh. Integer vulputate lectus sed dui feugiat, ut faucibus dui pharetra. Morbi sed venenatis elit, eu vestibulum lorem. Morbi sit amet lorem lorem. Nam laoreet, tortor a feugiat ullamcorper, elit ipsum lobortis est, et malesuada justo mauris non turpis.",
+				"Quisque eget lectus auctor, mollis dui eget, porta lorem. Phasellus vel feugiat lacus. In molestie; urna eu auctor commodo, ligula nunc placerat quam, euismod feugiat ipsum lorem non ligula. Duis purus dui, cursus quis magna quis, dignissim eleifend mauris."
+			],
+			"image": "http://www.placekitten.com/g/200/300"
+		},
+		"items": 4,
+		"total": 42.1,
+		"categories": [
+			{
+				"name": "Category",
+				"link": "/category/1",
+				"children": [
+					{
+						"name": "Category 2",
+						"link": "/category/2"
+					},
+					{
+						"name": "Category 3",
+						"link": "/category/3"
+					}
+				]
+			},
+			{
+				"name": "Category 4",
+				"link": "/category/4",
+				"children": [
+					{
+						"name": "Category 5",
+						"link": "/category/5"
+					},
+					{
+						"name": "Category 6",
+						"link": "/category/6"
+					}
+				]
+			},
+			{
+				"name": "Category 7",
+				"link": "/category/7"
+			},
+			{
+				"name": "Category 8",
+				"link": "/category/8"
+			}
+		]
+	},
+	"CartPage": {
+		"cartData": [
+			{
+				"name": "Product name 1",
+				"qty": 4,
+				"cost": 10.5,
+				"costTotal": 42,
+				"link": "/product/1",
+				"removeLink": "/cart?remove=1"
+			},
+			{
+				"name": "Product name 2",
+				"qty": 4,
+				"cost": 5.25,
+				"costTotal": 21,
+				"link": "/product/2",
+				"removeLink": "/cart?remove=2"
+			},
+			{
+				"name": "Product name 3",
+				"qty": 3,
+				"cost": 10.5,
+				"costTotal": 31.5,
+				"link": "/product/3",
+				"removeLink": "/cart?remove=3"
+			},
+			{
+				"name": "Product name 4",
+				"qty": 3,
+				"cost": 1.05,
+				"costTotal": 3.15,
+				"link": "/product/4",
+				"removeLink": "/cart?remove=4"
+			}
+		],
+		"items": 12,
+		"total": 97.65,
+		"categories": [
+			{
+				"name": "Category",
+				"link": "/category/1",
+				"children": [
+					{
+						"name": "Category 2",
+						"link": "/category/2"
+					},
+					{
+						"name": "Category 3",
+						"link": "/category/3"
+					}
+				]
+			},
+			{
+				"name": "Category 4",
+				"link": "/category/4",
+				"children": [
+					{
+						"name": "Category 5",
+						"link": "/category/5"
+					},
+					{
+						"name": "Category 6",
+						"link": "/category/6"
+					}
+				]
+			},
+			{
+				"name": "Category 7",
+				"link": "/category/7"
+			},
+			{
+				"name": "Category 8",
+				"link": "/category/8"
+			}
+		]
+	},
+	"Layout": {
+		"children": {
+			"root": "div",
+			"children": "CONTENT"
+		},
+		"items": 42,
+		"total": 123.4,
+		"categories": [
+			{
+				"name": "Category",
+				"link": "/category/1",
+				"children": [
+					{
+						"name": "Category 2",
+						"link": "/category/2"
+					},
+					{
+						"name": "Category 3",
+						"link": "/category/3"
+					}
+				]
+			},
+			{
+				"name": "Category 4",
+				"link": "/category/4",
+				"children": [
+					{
+						"name": "Category 5",
+						"link": "/category/5"
+					},
+					{
+						"name": "Category 6",
+						"link": "/category/6"
+					}
+				]
+			},
+			{
+				"name": "Category 7",
+				"link": "/category/7"
+			},
+			{
+				"name": "Category 8",
+				"link": "/category/8"
+			}
+		]
+	},
+	"Header": {},
+	"CartInfo": {
+		"items": 42,
+		"total": 123.4
+	},
+	"CategoryList": {
+		"data": [
+			{
+				"name": "foo",
+				"link": "/category/1"
+			},
+			{
+				"name": "bar",
+				"link": "/category/2",
+				"children": [
+					{
+						"name": "foo",
+						"link": "/category/1"
+					},
+					{
+						"name": "foo",
+						"link": "/category/1"
+					},
+					{
+						"name": "foo",
+						"link": "/category/1"
+					}
+				]
+			},
+			{
+				"name": "bar",
+				"link": "/category/2"
+			}
+		]
+	},
+	"CategoryListItem": {
+		"item": {
+			"name": "Category",
+			"link": "/category/1",
+			"children": [
+				{
+					"name": "Category 2",
+					"link": "/category/2"
+				},
+				{
+					"name": "Category 3",
+					"link": "/category/3"
+				}
+			]
+		}
+	},
+	"ProductList": {
+		"products": [
+			{
+				"name": "Product 1",
+				"link": "/product/1",
+				"image": "http://placehold.it/200x150"
+			},
+			{
+				"name": "Product 1",
+				"link": "/product/1",
+				"image": "http://placehold.it/200x150"
+			},
+			{
+				"name": "Product 1",
+				"link": "/product/1",
+				"image": "http://placehold.it/200x150"
+			},
+			{
+				"name": "Product 1",
+				"link": "/product/1",
+				"image": "http://placehold.it/200x150"
+			},
+			{
+				"name": "Product 1",
+				"link": "/product/1",
+				"image": "http://placehold.it/200x150"
+			},
+			{
+				"name": "Product 1",
+				"link": "/product/1",
+				"image": "http://placehold.it/200x150"
+			},
+			{
+				"name": "Product 1",
+				"link": "/product/1",
+				"image": "http://placehold.it/200x150"
+			},
+			{
+				"name": "Product 1",
+				"link": "/product/1",
+				"image": "http://placehold.it/200x150"
+			}
+		]
+	},
+	"ProductBox": {
+		"product": {
+			"name": "Product 1",
+			"link": "/product/1",
+			"image": "http://placehold.it/200x150"
+		}
+	},
+	"AddToCartButton": {},
+	"ProductDetail": {
+		"product": {
+			"name": "Product name",
+			"description": [
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus malesuada maximus metus non volutpat. Etiam tincidunt auctor sapien, ornare rhoncus nibh. Integer vulputate lectus sed dui feugiat, ut faucibus dui pharetra. Morbi sed venenatis elit, eu vestibulum lorem. Morbi sit amet lorem lorem. Nam laoreet, tortor a feugiat ullamcorper, elit ipsum lobortis est, et malesuada justo mauris non turpis.",
+				"Quisque eget lectus auctor, mollis dui eget, porta lorem. Phasellus vel feugiat lacus. In molestie; urna eu auctor commodo, ligula nunc placerat quam, euismod feugiat ipsum lorem non ligula. Duis purus dui, cursus quis magna quis, dignissim eleifend mauris."
+			],
+			"image": "http://www.placekitten.com/g/200/300"
+		}
+	},
+	"CartDetail": {
+		"items": 12,
+		"total": 97.65,
+		"data": [
+			{
+				"name": "Product name 1",
+				"qty": 4,
+				"cost": 10.5,
+				"costTotal": 42,
+				"link": "/product/1",
+				"removeLink": "/cart?remove=1"
+			},
+			{
+				"name": "Product name 2",
+				"qty": 4,
+				"cost": 5.25,
+				"costTotal": 21,
+				"link": "/product/2",
+				"removeLink": "/cart?remove=2"
+			},
+			{
+				"name": "Product name 3",
+				"qty": 3,
+				"cost": 10.5,
+				"costTotal": 31.5,
+				"link": "/product/3",
+				"removeLink": "/cart?remove=3"
+			},
+			{
+				"name": "Product name 4",
+				"qty": 3,
+				"cost": 1.05,
+				"costTotal": 3.15,
+				"link": "/product/4",
+				"removeLink": "/cart?remove=4"
+			}
+		]
+	},
+	"CartRow": {
+		"item": {
+			"name": "Product name",
+			"qty": 4,
+			"cost": 10.5,
+			"costTotal": 42,
+			"link": "/product/1",
+			"removeLink": "/cart?remove=1"
+		}
+	}
 }
