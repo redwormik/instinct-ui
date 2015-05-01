@@ -19,12 +19,14 @@ var Main = React.createClass({
 		return this.state.currentComponent || Object.keys(this.state.components)[0];
 	},
 	componentDidUpdate: function (prevProps, prevState) {
-		if ((created = this.getRefluxStore("Components").created)) {
-			this.transitionTo("component", { component: created });
-			return;
-		}
+		Object.keys(this.state.components).forEach(function (name) {
+			if (prevState.components[name] === undefined) {
+				this.transitionTo("component", { component: name });
+				return;
+			}
+		}.bind(this));
 		var name = this.state.currentComponent;
-		if (!created && name !== prevState.currentComponent) {
+		if (name !== prevState.currentComponent) {
 			if (name) {
 				this.transitionTo("component", { component: name });
 			}
@@ -36,7 +38,7 @@ var Main = React.createClass({
 	render: function () {
 		var current = this.getCurrent();
 		var component = this.state.components[current];
-		var data = this.state.data[current] || {};
+		var data = this.state.data[current];
 		var paneStyles = {
 			width: "50%",
 			height: "calc(100% - 32px)",

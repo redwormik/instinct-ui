@@ -14,6 +14,9 @@ var Renderer = React.createClass({
 		};
 	},
 	componentWillReceiveProps: function (newProps) {
+		if (newProps.components === this.props.components) {
+			return;
+		}
 		this.setState({
 			components: Lazy(newProps.components).map(function (definition, key) {
 				return [key, this.createComponent(definition, key)];

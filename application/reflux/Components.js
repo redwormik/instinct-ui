@@ -1,3 +1,4 @@
+var assign = Object.assign || require("react/lib/Object.assign.js");
 
 
 var Components = {
@@ -11,30 +12,26 @@ var Components = {
 		],
 		apiName: "components",
 		init: function () {
-			this.state = {};
-			this.created = null;
+			this.state = null;
 			this.parent.actions.renameComponent.shouldEmit = this.shouldRenameComponent;
 		},
 		onGetComponents: function () {
-			this.created = null;
 			this.loadData();
 		},
 		onCreateComponent: function () {
 			this.apiPost({
 				component: { root: "div", style: {}, children: "" }
 			}).then(function (data) {
-				Object.keys(data).forEach(function (name) {
-					this.state[name] = data[name];
-					this.created = name;
-				}.bind(this));
+				this.state = assign({}, this.state, data);
 				this.trigger(this.state);
-				// TODO: update Data?
 			}.bind(this))
-			.done();
+				.done();
 		},
 		onUpdateComponent: function (component, name) {
 			this.sendData({ component: component }, name);
-			this.state[name] = component;
+			var tmp = {};
+			tmp[name] = component;
+			this.state = assign({}, this.state, tmp);
 			this.trigger(this.state);
 		},
 		shouldRenameComponent: function (newName, oldName) {
@@ -56,7 +53,14 @@ var Components = {
 				.finally(this.updateFinish)
 				.finally(dataStore.updateFinish)
 				.done();
-			delete this.state[name];
+
+			var oldState = this.state;
+			this.state = Object.keys(this.state).reduce(function (memo, key) {
+				if (key !== name) {
+					memo[key] = oldState[key];
+				}
+				return memo;
+			}, {});
 			this.trigger(this.state);
 		}
 	}

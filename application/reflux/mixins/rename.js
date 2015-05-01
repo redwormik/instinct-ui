@@ -3,7 +3,9 @@
 module.exports = {
 	renameKeys: function (newName, oldName, data) {
 		return Object.keys(data).reduce(function (memo, key) {
-			memo[key === oldName ? newName : key] = data[key];
+			if (key !== newName) {
+				memo[key === oldName ? newName : key] = data[key];
+			}
 			return memo;
 		}, {});
 	},
