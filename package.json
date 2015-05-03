@@ -1,6 +1,6 @@
 {
   "name": "instinct-ui",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Object-oriented web UI design tool",
   "main": "index.js",
   "dependencies": {
