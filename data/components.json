@@ -234,5 +234,34 @@
 				"val": "data"
 			}
 		}
+	},
+	"ImageList": {
+		"root": "div",
+		"style": {},
+		"children": {
+			"root": "$for",
+			"for": "index",
+			"in": {
+				"root": "$val",
+				"val": "images"
+			},
+			"do": {
+				"root": "img",
+				"style": {
+					"float": "left"
+				},
+				"src": {
+					"root": "$index",
+					"index": {
+						"root": "$val",
+						"val": "index"
+					},
+					"in": {
+						"root": "$val",
+						"val": "images"
+					}
+				}
+			}
+		}
 	}
 }
